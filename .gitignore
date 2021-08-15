@@ -5,6 +5,13 @@
 *.so
 *.dylib
 
+# IDE integration
+/.vscode/*
+/.idea/*
+
+# Mac DS_Store
+.DS_Store
+
 # Test binary, built with `go test -c`
 *.test
 
