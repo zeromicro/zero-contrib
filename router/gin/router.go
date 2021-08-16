@@ -43,7 +43,6 @@ func (pr *ginRouter) Handle(method, reqPath string, handler http.Handler) error 
 		for i := 0; i < len(ctx.Params); i++ {
 			params[ctx.Params[i].Key] = ctx.Params[i].Value
 		}
-		fmt.Println(params)
 		if len(params) > 0 {
 			ctx.Request = pathvar.WithVars(ctx.Request, params)
 		}
