@@ -27,7 +27,8 @@ import (
 	"github.com/tal-tech/go-zero/core/service"
 	"github.com/tal-tech/go-zero/rest"
 	"github.com/tal-tech/go-zero/rest/httpx"
-    "github.com/zeromicro/zero-contrib/router/gin"
+    	"github.com/zeromicro/zero-contrib/router/gin"
+	stdgin "github.com/gin-gonic/gin"
 )
 
 type CommonPathID struct {
@@ -45,7 +46,7 @@ func (c *CommonPathID) String() string {
 }
 
 func init() {
-	gin.SetMode(gin.ReleaseMode)
+	stdgin.SetMode(stdgin.ReleaseMode)
 }
 
 func main() {
