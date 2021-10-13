@@ -1,9 +1,15 @@
 ### Quick Start
-Prerequesites:
-* Install `go-zero`: go get -u github.com/tal-tech/go-zero@master
 
+Prerequesites:
+
+- Install `go-zero`:
+
+```console
+go get -u github.com/tal-tech/go-zero
+```
 
 Download the module:
+
 ```console
 go get -u github.com/zeromicro/zero-contrib/router/gin
 ```
@@ -14,20 +20,20 @@ For example:
 package main
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/service"
 	"github.com/tal-tech/go-zero/rest"
 	"github.com/tal-tech/go-zero/rest/httpx"
     "github.com/zeromicro/zero-contrib/router/gin"
-	"net/http"
-	"strings"
 )
 
 type CommonPathID struct {
 	ID   int    `path:"id"`
 	Name string `path:"name"`
 }
-
 
 func (c *CommonPathID) String() string {
 	var builder strings.Builder
@@ -39,11 +45,11 @@ func (c *CommonPathID) String() string {
 }
 
 func init() {
-    gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 }
 
 func main() {
-    r := gin.NewRouter()
+	r := gin.NewRouter()
 	engine := rest.MustNewServer(rest.RestConf{
 		ServiceConf: service.ServiceConf{
 			Log: logx.LogConf{
@@ -55,7 +61,7 @@ func main() {
 		MaxConns: 500,
 	}, rest.WithRouter(r))
 
-    // NotFound defines a handler to respond whenever a route could
+	// NotFound defines a handler to respond whenever a route could
 	// not be found.
 	r.SetNotFoundHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(404)
@@ -63,7 +69,7 @@ func main() {
 	}))
 	// MethodNotAllowed defines a handler to respond whenever a method is
 	// not allowed.
-    r.SetNotAllowedHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	r.SetNotAllowedHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(405)
 		w.Write([]byte("405"))
 	}))
@@ -83,5 +89,4 @@ func main() {
 	})
 	engine.Start()
 }
-
 ```
