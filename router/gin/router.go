@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/tal-tech/go-zero/rest/httpx"
 	"github.com/tal-tech/go-zero/rest/pathvar"
 )
@@ -38,7 +37,7 @@ func (pr *ginRouter) Handle(method, reqPath string, handler http.Handler) error 
 	}
 
 	pr.g.Handle(strings.ToUpper(method), reqPath, func(ctx *gin.Context) {
-		params := make(map[string]string, 0)
+		params := make(map[string]string)
 		for i := 0; i < len(ctx.Params); i++ {
 			params[ctx.Params[i].Key] = ctx.Params[i].Value
 		}

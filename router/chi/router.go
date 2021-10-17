@@ -4,10 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/pathvar"
-
 	"github.com/go-chi/chi"
 	"github.com/tal-tech/go-zero/rest/httpx"
+	"github.com/tal-tech/go-zero/rest/pathvar"
 )
 
 var (
@@ -46,7 +45,7 @@ func (pr *chiRouter) Handle(method, reqPath string, handler http.Handler) error 
 func (pr *chiRouter) withUrlParamsToContext(r *http.Request) *http.Request {
 	if ctx := chi.RouteContext(r.Context()); ctx != nil {
 		urlParams := ctx.URLParams
-		params := make(map[string]string, 0)
+		params := make(map[string]string)
 		for i := 0; i < len(urlParams.Values); i++ {
 			params[urlParams.Keys[i]] = urlParams.Values[i]
 		}
