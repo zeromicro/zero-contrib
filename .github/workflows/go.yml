@@ -22,9 +22,9 @@ jobs:
 
       - name: Get dependencies
         run: |
-          cd router/chi && go get -v -t -d ./...
-          cd router/gin && go get -v -t -d ./...
-          cd zrpc/registry/consul && go get -v -t -d ./...
+          (cd router/chi && go get -v -t -d ./...)
+          (cd router/gin && go get -v -t -d ./...)
+          (cd zrpc/registry/consul && go get -v -t -d ./...)
 
       - name: Lint
         run: |
