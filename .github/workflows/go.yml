@@ -35,7 +35,10 @@ jobs:
           test -z "$(gofumpt -s -l -extra .)" || echo "Please run 'gofumpt -l -w -extra .'"
 
       - name: Test
-        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+        run: |
+          (cd router/chi && go test -race -coverprofile=coverage.txt -covermode=atomic ./...)
+          (cd router/gin && go test -race -coverprofile=coverage.txt -covermode=atomic ./...)
+          (cd zrpc/registry/consul && go test -race -coverprofile=coverage.txt -covermode=atomic ./...)
 
       - name: Codecov
         uses: codecov/codecov-action@v2
