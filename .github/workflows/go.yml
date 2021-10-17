@@ -28,7 +28,9 @@ jobs:
 
       - name: Lint
         run: |
-          go vet -stdmethods=false $(go list ./...)
+          (cd router/chi && go vet -stdmethods=false $(go list ./...))
+          (cd router/gin && go vet -stdmethods=false $(go list ./...))
+          (cd zrpc/registry/consul && go vet -stdmethods=false $(go list ./...))
           go install mvdan.cc/gofumpt@latest
           test -z "$(gofumpt -s -l -extra .)" || echo "Please run 'gofumpt -l -w -extra .'"
 
