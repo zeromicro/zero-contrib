@@ -25,7 +25,7 @@ const schemeName = "nacos"
 // builder implements resolver.Builder and use for constructing all consul resolvers
 type builder struct{}
 
-func (b *builder) Build(url resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
+func (b *builder) Build(url resolver.Target, conn resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
 	dsn := strings.Join([]string{schemeName + ":/", url.Authority, url.Endpoint}, "/")
 	tgt, err := parseURL(dsn)
 	if err != nil {
@@ -42,13 +42,26 @@ func (b *builder) Build(url resolver.Target, cc resolver.ClientConn, opts resolv
 		*constant.NewServerConfig(host, port),
 	}
 
+	cc := &constant.ClientConfig{
+		NamespaceId: tgt.NamespaceID,
+		Username:    tgt.User,
+		Password:    tgt.Password,
+		TimeoutMs:   uint64(tgt.Timeout),
+	}
+
+	if tgt.CacheDir != "" {
+		cc.CacheDir = tgt.CacheDir
+	}
+	if tgt.LogDir != "" {
+		cc.LogDir = tgt.LogDir
+	}
+	if tgt.LogLevel != "" {
+		cc.LogLevel = tgt.LogLevel
+	}
+
 	cli, err := clients.NewNamingClient(vo.NacosClientParam{
 		ServerConfigs: sc,
-		ClientConfig: &constant.ClientConfig{
-			Username:  tgt.User,
-			Password:  tgt.Password,
-			TimeoutMs: uint64(tgt.Timeout),
-		},
+		ClientConfig:  cc,
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "Couldn't connect to the nacos API")
@@ -64,7 +77,7 @@ func (b *builder) Build(url resolver.Target, cc resolver.ClientConn, opts resolv
 		SubscribeCallback: newWatcher(ctx, cancel, pipe).CallBackHandle, // required
 	})
 
-	go populateEndpoints(ctx, cc, pipe)
+	go populateEndpoints(ctx, conn, pipe)
 
 	return &resolvr{cancelFunc: cancel}, nil
 }

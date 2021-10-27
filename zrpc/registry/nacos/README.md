@@ -60,5 +60,5 @@ import _ "github.com/zeromicro/zero-contrib/zrpc/registry/nacos"
 
 ```yaml
 # nacos://[user:passwd]@host/service?param=value'
-Target: nacos://192.168.100.15:8848/nacos.rpc?timeout=5000s
+Target: nacos://192.168.100.15:8848/nacos.rpc?namespaceid=public&timeout=5000s
 ```

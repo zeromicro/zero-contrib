@@ -2,6 +2,7 @@ package nacos
 
 import (
 	"net/url"
+	"os"
 	"strings"
 	"time"
 
@@ -10,14 +11,18 @@ import (
 )
 
 type target struct {
-	Addr      string   `key:",optional"`
-	User      string   `key:",optional"`
-	Password  string   `key:",optional"`
-	Service   string   `key:",optional"`
-	GroupName string   `key:",optional"`
-	Clusters  []string `key:",optional"`
+	Addr        string        `key:",optional"`
+	User        string        `key:",optional"`
+	Password    string        `key:",optional"`
+	Service     string        `key:",optional"`
+	GroupName   string        `key:",optional"`
+	Clusters    []string      `key:",optional"`
+	NamespaceID string        `key:"namespaceid,optional"`
+	Timeout     time.Duration `key:"timeout,optional"`
 
-	Timeout time.Duration `key:"timeout,optional"`
+	LogLevel string `key:",optional"`
+	LogDir   string `key:",optional"`
+	CacheDir string `key:",optional"`
 }
 
 //  parseURL with parameters
@@ -43,6 +48,14 @@ func parseURL(u string) (target, error) {
 	if err != nil {
 		return target{}, errors.Wrap(err, "Malformed URL parameters")
 	}
+
+	if tgt.NamespaceID == "" {
+		tgt.NamespaceID = "public"
+	}
+
+	tgt.LogLevel = os.Getenv("NACOS_LOG_LEVEL")
+	tgt.LogDir = os.Getenv("NACOS_LOG_DIR")
+	tgt.CacheDir = os.Getenv("NACOS_CACHE_DIR")
 
 	tgt.User = rawURL.User.Username()
 	tgt.Password, _ = rawURL.User.Password()
