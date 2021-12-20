@@ -12,7 +12,7 @@ For example:
 
 ## Service
 
-- etc/polaris.yaml
+- ./polaris.yaml
 
 ```yaml
 global:
@@ -56,6 +56,6 @@ import _ "github.com/zeromicro/zero-contrib/zrpc/registry/polaris"
 - etc/\*.yaml
 
 ```yaml
-# consul://[user:passwd]@host/service?param=value'
-Target: consul://192.168.100.15:8500/consul.rpc?wait=14s
+# polaris://[user:passwd]@host/service?param=value'
+Target: polaris://127.0.0.1:8091/EchoServerZero?wait=14s
 ```
