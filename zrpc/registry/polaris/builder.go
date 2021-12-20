@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	consumers map[string]api.ConsumerAPI
-	lock      *sync.Mutex = &sync.Mutex{}
+	consumers map[string]api.ConsumerAPI = make(map[string]api.ConsumerAPI)
+	lock      *sync.Mutex                = &sync.Mutex{}
 )
 
 func init() {

@@ -7,25 +7,26 @@ const (
 
 // options
 type Options struct {
-	ListenOn    string
-	Namespace   string
-	ServiceName string
-	Weight      float64
-	Protocol    string
-	Version     string
-	TTL         int
-	Metadata    map[string]string
+	ListenOn            string
+	Namespace           string
+	ServiceName         string
+	Weight              float64
+	Protocol            string
+	Version             string
+	HeartbeatInervalSec int
+	Metadata            map[string]string
 }
 
 type Option func(*Options)
 
 func NewPolarisConfig(listenOn string, opts ...Option) *Options {
 	options := &Options{
-		ListenOn:  listenOn,
-		Namespace: "default",
-		Protocol:  "zrpc",
-		Version:   "1.0.0",
-		Metadata:  make(map[string]string),
+		ListenOn:            listenOn,
+		Namespace:           "default",
+		Protocol:            "zrpc",
+		Version:             "1.0.0",
+		HeartbeatInervalSec: 5,
+		Metadata:            make(map[string]string),
 	}
 
 	for _, opt := range opts {
@@ -35,9 +36,9 @@ func NewPolarisConfig(listenOn string, opts ...Option) *Options {
 	return options
 }
 
-func WithTTL(ttl int) Option {
+func WithHeartbeatInervalSec(heartbeatInervalSec int) Option {
 	return func(o *Options) {
-		o.TTL = ttl
+		o.HeartbeatInervalSec = heartbeatInervalSec
 	}
 }
 

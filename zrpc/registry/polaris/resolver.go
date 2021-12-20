@@ -34,13 +34,24 @@ func newWatcher(out chan<- []string) *polarisServiceWatcher {
 }
 
 func (watcher *polarisServiceWatcher) startWatch(ctx context.Context, consumer api.ConsumerAPI, subscribeParam *api.WatchServiceRequest) {
-
 	for {
 		resp, err := consumer.WatchService(subscribeParam)
 		if err != nil {
 			time.Sleep(time.Duration(500 * time.Millisecond))
 			continue
 		}
+
+		instances := resp.GetAllInstancesResp.Instances
+		ee := make([]string, len(instances)+1)
+		for i := range instances {
+			ins := instances[i]
+			ee[i] = fmt.Sprintf("%s:%d", ins.GetHost(), ins.GetPort())
+		}
+		if len(ee) != 0 {
+			watcher.out <- ee
+		}
+
+		logx.Info("[Polaris resolver] Watch has been start, param : %#v", subscribeParam)
 
 		select {
 		case <-ctx.Done():
@@ -50,7 +61,7 @@ func (watcher *polarisServiceWatcher) startWatch(ctx context.Context, consumer a
 			eType := event.GetSubScribeEventType()
 			if eType == api.EventInstance {
 				insEvent := event.(*model.InstanceEvent)
-				ee := make([]string, 0, len(insEvent.AddEvent.Instances)+len(insEvent.UpdateEvent.UpdateList))
+				ee := make([]string, len(insEvent.AddEvent.Instances)+len(insEvent.UpdateEvent.UpdateList))
 				if insEvent.AddEvent != nil {
 					for _, s := range insEvent.AddEvent.Instances {
 						ee = append(ee, fmt.Sprintf("%s:%d", s.GetHost(), s.GetPort()))

@@ -20,8 +20,8 @@ import (
 
 var (
 	provider api.ProviderAPI
-	beatlock *sync.RWMutex = &sync.RWMutex{}
-	hearts   map[string]context.CancelFunc
+	beatlock *sync.RWMutex                 = &sync.RWMutex{}
+	hearts   map[string]context.CancelFunc = make(map[string]context.CancelFunc)
 )
 
 func init() {
@@ -54,7 +54,7 @@ func RegitserService(opts *Options) error {
 	req.Protocol = &opts.Protocol
 	req.Host = host
 	req.Port = int(port)
-	req.TTL = &opts.TTL
+	req.TTL = &opts.HeartbeatInervalSec
 
 	resp, err := provider.Register(req)
 	if err != nil {
@@ -94,7 +94,7 @@ func addShutdownListener(registerReq *api.InstanceRegisterRequest, opts *Options
 
 // doHeartbeat
 func doHeartbeat(ctx context.Context, req *api.InstanceRegisterRequest, opts *Options) {
-	ticker := time.NewTicker(time.Duration(opts.TTL * int(time.Second)))
+	ticker := time.NewTicker(time.Duration(opts.HeartbeatInervalSec * int(time.Second)))
 	for {
 		select {
 		case <-ctx.Done():
