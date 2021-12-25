@@ -107,7 +107,7 @@ func doHeartbeat(ctx context.Context, req *api.InstanceRegisterRequest, opts *Op
 			beatreq.Port = req.Port
 
 			if err := provider.Heartbeat(beatreq); err != nil {
-				logx.Error("[Polaris provider] do heartbeat fail : %s, req : %#v", err.Error(), beatreq)
+				logx.Errorf("[Polaris provider] do heartbeat fail : %s, req : %#v", err.Error(), beatreq)
 			}
 		}
 	}

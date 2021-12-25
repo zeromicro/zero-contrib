@@ -51,7 +51,7 @@ func (watcher *polarisServiceWatcher) startWatch(ctx context.Context, consumer a
 			watcher.out <- ee
 		}
 
-		logx.Info("[Polaris resolver] Watch has been start, param : %#v", subscribeParam)
+		logx.Infof("[Polaris resolver] Watch has been start, param : %#v", subscribeParam)
 
 		select {
 		case <-ctx.Done():
