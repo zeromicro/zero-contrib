@@ -109,7 +109,7 @@ func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, inpu
 	for {
 		select {
 		case cc := <-input:
-			connsSet := make(map[string]string, len(cc))
+			connsSet := make(map[string][]string, len(cc))
 			for _, c := range cc {
 				addr, tag := splitAddr(c)
 				connsSet[addr] = tag
@@ -117,8 +117,8 @@ func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, inpu
 			conns := make([]resolver.Address, 0, len(connsSet))
 			for c, tags := range connsSet {
 				rAddr := resolver.Address{Addr: c}
-				if tags != "" {
-					rAddr.Attributes = attributes.New(dyeingKey, tags)
+				if tags != nil {
+					rAddr.Attributes = attributes.New(consulTags, tags)
 				}
 				conns = append(conns, rAddr)
 			}
@@ -131,22 +131,17 @@ func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, inpu
 	}
 }
 
-func splitAddr(conn string) (addr, tag string) {
+func splitAddr(conn string) (addr string, tag []string) {
 	connAttrs := strings.Split(conn, dyeingStp)
 	if len(connAttrs) < 2 {
-		return connAttrs[0], ""
+		return connAttrs[0], nil
 	}
 
 	if connAttrs[1] == "" {
-		return connAttrs[0], ""
+		return connAttrs[0], nil
 	}
 
-	for _, tag := range strings.Split(connAttrs[1], ",") {
-		if strings.HasPrefix(tag, dyeingPrefix) {
-			return connAttrs[0], tag[len(dyeingPrefix):]
-		}
-	}
-	return connAttrs[0], ""
+	return connAttrs[0], nil
 }
 
 // byAddressString sorts resolver.Address by Address Field  sorting in increasing order.
