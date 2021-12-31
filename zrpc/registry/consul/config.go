@@ -3,8 +3,11 @@ package consul
 import "errors"
 
 const (
-	allEths  = "0.0.0.0"
-	envPodIP = "POD_IP"
+	allEths      = "0.0.0.0"
+	envPodIP     = "POD_IP"
+	dyeingPrefix = "dye."
+	dyeingKey    = "consulDyeing"
+	dyeingStp    = "^^"
 )
 
 // Conf is the config item with the given key on etcd.

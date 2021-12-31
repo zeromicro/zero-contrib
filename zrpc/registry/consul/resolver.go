@@ -4,11 +4,13 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/hashicorp/consul/api"
 	"github.com/jpillora/backoff"
 	"github.com/tal-tech/go-zero/core/logx"
+	"google.golang.org/grpc/attributes"
 	"google.golang.org/grpc/resolver"
 )
 
@@ -65,11 +67,11 @@ func watchConsulService(ctx context.Context, s servicer, tgt target, out chan<- 
 
 			bck.Reset()
 			lastIndex = meta.LastIndex
-			logx.Infof("[Consul resolver] %d endpoints fetched in(+wait) %s for target={%s}",
-				len(ss),
-				meta.RequestTime,
-				tgt.String(),
-			)
+			//logx.Infof("[Consul resolver] %d endpoints fetched in(+wait) %s for target={%s}",
+			//	len(ss),
+			//	meta.RequestTime,
+			//	tgt.String(),
+			//)
 
 			ee := make([]string, 0, len(ss))
 			for _, s := range ss {
@@ -77,7 +79,7 @@ func watchConsulService(ctx context.Context, s servicer, tgt target, out chan<- 
 				if s.Service.Address == "" {
 					address = s.Node.Address
 				}
-				ee = append(ee, fmt.Sprintf("%s:%d", address, s.Service.Port))
+				ee = append(ee, fmt.Sprintf("%s:%d%s%s", address, s.Service.Port, dyeingStp, strings.Join(s.Service.Tags, ",")))
 			}
 
 			if tgt.Limit != 0 && len(ee) > tgt.Limit {
@@ -107,13 +109,18 @@ func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, inpu
 	for {
 		select {
 		case cc := <-input:
-			connsSet := make(map[string]struct{}, len(cc))
+			connsSet := make(map[string]string, len(cc))
 			for _, c := range cc {
-				connsSet[c] = struct{}{}
+				addr, tag := splitAddr(c)
+				connsSet[addr] = tag
 			}
 			conns := make([]resolver.Address, 0, len(connsSet))
-			for c := range connsSet {
-				conns = append(conns, resolver.Address{Addr: c})
+			for c, tags := range connsSet {
+				rAddr := resolver.Address{Addr: c}
+				if tags != "" {
+					rAddr.Attributes = attributes.New(dyeingKey, tags)
+				}
+				conns = append(conns, rAddr)
 			}
 			sort.Sort(byAddressString(conns)) // Don't replace the same address list in the balancer
 			_ = clientConn.UpdateState(resolver.State{Addresses: conns})
@@ -122,6 +129,24 @@ func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, inpu
 			return
 		}
 	}
+}
+
+func splitAddr(conn string) (addr, tag string) {
+	connAttrs := strings.Split(conn, dyeingStp)
+	if len(connAttrs) == 1 {
+		return connAttrs[0], ""
+	}
+
+	if connAttrs[1] == "" {
+		return connAttrs[0], ""
+	}
+
+	for _, tag := range strings.Split(connAttrs[1], ",") {
+		if strings.HasPrefix(tag, dyeingPrefix) {
+			return connAttrs[0], tag[len(dyeingPrefix):]
+		}
+	}
+	return connAttrs[0], ""
 }
 
 // byAddressString sorts resolver.Address by Address Field  sorting in increasing order.
