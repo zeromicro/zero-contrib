@@ -67,11 +67,11 @@ func watchConsulService(ctx context.Context, s servicer, tgt target, out chan<- 
 
 			bck.Reset()
 			lastIndex = meta.LastIndex
-			//logx.Infof("[Consul resolver] %d endpoints fetched in(+wait) %s for target={%s}",
-			//	len(ss),
-			//	meta.RequestTime,
-			//	tgt.String(),
-			//)
+			logx.Infof("[Consul resolver] %d endpoints fetched in(+wait) %s for target={%s}",
+				len(ss),
+				meta.RequestTime,
+				tgt.String(),
+			)
 
 			ee := make([]string, 0, len(ss))
 			for _, s := range ss {
