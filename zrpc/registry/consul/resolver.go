@@ -22,6 +22,12 @@ type resolvr struct {
 	cancelFunc context.CancelFunc
 }
 
+type consulAddr struct {
+	Addr string
+	Port int
+	Tags []string
+}
+
 func (r *resolvr) ResolveNow(resolver.ResolveNowOptions) {}
 
 // Close closes the resolver.
@@ -33,8 +39,8 @@ type servicer interface {
 	Service(string, string, bool, *api.QueryOptions) ([]*api.ServiceEntry, *api.QueryMeta, error)
 }
 
-func watchConsulService(ctx context.Context, s servicer, tgt target, out chan<- []string) {
-	res := make(chan []string)
+func watchConsulService(ctx context.Context, s servicer, tgt target, out chan<- []*consulAddr) {
+	res := make(chan []*consulAddr)
 	quit := make(chan struct{})
 	bck := &backoff.Backoff{
 		Factor: 2,
@@ -73,13 +79,17 @@ func watchConsulService(ctx context.Context, s servicer, tgt target, out chan<- 
 				tgt.String(),
 			)
 
-			ee := make([]string, 0, len(ss))
+			ee := make([]*consulAddr, 0, len(ss))
 			for _, s := range ss {
 				address := s.Service.Address
 				if s.Service.Address == "" {
 					address = s.Node.Address
 				}
-				ee = append(ee, fmt.Sprintf("%s:%d%s%s", address, s.Service.Port, dyeingStp, strings.Join(s.Service.Tags, ",")))
+				ee = append(ee, &consulAddr{
+					Addr: address,
+					Port: s.Service.Port,
+					Tags: s.Service.Tags,
+				})
 			}
 
 			if tgt.Limit != 0 && len(ee) > tgt.Limit {
@@ -105,23 +115,23 @@ func watchConsulService(ctx context.Context, s servicer, tgt target, out chan<- 
 	}
 }
 
-func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, input <-chan []string) {
+func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, input <-chan []*consulAddr) {
 	for {
 		select {
 		case cc := <-input:
 			connsSet := make(map[string][]string, len(cc))
 			for _, c := range cc {
-				addr, tag := splitAddr(c)
-				connsSet[addr] = tag
+				connsSet[fmt.Sprintf("%s:%d", c.Addr, c.Port)] = c.Tags
 			}
 			conns := make([]resolver.Address, 0, len(connsSet))
 			for c, tags := range connsSet {
 				rAddr := resolver.Address{Addr: c}
 				if tags != nil {
-					rAddr.Attributes = attributes.New(consulTags, tags)
+					rAddr.Attributes = attributes.New(consulTags, strings.Join(tags, ","))
 				}
 				conns = append(conns, rAddr)
 			}
+
 			sort.Sort(byAddressString(conns)) // Don't replace the same address list in the balancer
 			_ = clientConn.UpdateState(resolver.State{Addresses: conns})
 		case <-ctx.Done():
@@ -129,19 +139,6 @@ func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, inpu
 			return
 		}
 	}
-}
-
-func splitAddr(conn string) (addr string, tag []string) {
-	connAttrs := strings.Split(conn, dyeingStp)
-	if len(connAttrs) < 2 {
-		return connAttrs[0], nil
-	}
-
-	if connAttrs[1] == "" {
-		return connAttrs[0], nil
-	}
-
-	return connAttrs[0], nil
 }
 
 // byAddressString sorts resolver.Address by Address Field  sorting in increasing order.
