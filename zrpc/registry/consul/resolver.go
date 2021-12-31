@@ -133,7 +133,7 @@ func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, inpu
 
 func splitAddr(conn string) (addr, tag string) {
 	connAttrs := strings.Split(conn, dyeingStp)
-	if len(connAttrs) == 1 {
+	if len(connAttrs) < 2 {
 		return connAttrs[0], ""
 	}
 
