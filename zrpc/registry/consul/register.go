@@ -14,7 +14,7 @@ import (
 	"github.com/tal-tech/go-zero/core/proc"
 )
 
-func RegitserService(listenOn string, c Conf) error {
+func RegisterService(listenOn string, c Conf) error {
 	pubListenOn := figureOutListenOn(listenOn)
 
 	host, ports, err := net.SplitHostPort(pubListenOn)
