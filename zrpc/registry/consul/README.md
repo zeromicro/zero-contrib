@@ -15,9 +15,16 @@ For example:
 - etc/\*.yaml
 
 ```yaml
-Consul:
+  Consul:
   Host: 192.168.100.15:8500
-  Key: consul.rpc
+  Key:consul.rpc
+  Meta:
+    Protocol: grpc
+  Tag:
+    -
+      tag
+      rpc
+
 ```
 
 - internal/config/config.go
