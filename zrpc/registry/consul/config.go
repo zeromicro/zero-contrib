@@ -12,7 +12,8 @@ const (
 type Conf struct {
 	Host string
 	Key  string
-	Tag  []string `json:",optional"`
+	Tag  []string          `json:",optional"`
+	Meta map[string]string `json:",optional"`
 }
 
 // Validate validates c.
