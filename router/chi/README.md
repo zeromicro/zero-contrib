@@ -1,6 +1,6 @@
 ### Quick Start
 Prerequesites:
-* Install `go-zero`: go get -u github.com/tal-tech/go-zero@master
+* Install `go-zero`: go get -u github.com/zeromicro/go-zero@master
 
 
 Download the module:
@@ -14,10 +14,10 @@ For example:
 package main
 
 import (
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/core/service"
-	"github.com/tal-tech/go-zero/rest"
-	"github.com/tal-tech/go-zero/rest/httpx"
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/service"
+	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/rest/httpx"
     "github.com/zeromicro/zero-contrib/router/chi"
 	"net/http"
 	"strings"

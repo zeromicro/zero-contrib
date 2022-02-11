@@ -10,10 +10,10 @@ import (
 
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/vo"
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/core/proc"
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/proc"
 
-	"github.com/tal-tech/go-zero/core/netx"
+	"github.com/zeromicro/go-zero/core/netx"
 )
 
 func RegitserService(opts *Options) error {
