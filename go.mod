@@ -11,5 +11,5 @@ require (
 	github.com/polarismesh/polaris-go v1.0.1
 	github.com/stretchr/testify v1.7.0
 	github.com/zeromicro/go-zero v1.3.0
-	google.golang.org/grpc v1.44.0
+	google.golang.org/grpc v1.43.0
 )
