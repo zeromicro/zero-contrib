@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/core/netx"
-	"github.com/tal-tech/go-zero/core/proc"
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/netx"
+	"github.com/zeromicro/go-zero/core/proc"
 )
 
 func RegitserService(listenOn string, c Conf) error {
