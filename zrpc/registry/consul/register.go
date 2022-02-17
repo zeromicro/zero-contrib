@@ -14,7 +14,7 @@ import (
 	"github.com/zeromicro/go-zero/core/proc"
 )
 
-func RegitserService(listenOn string, c Conf) error {
+func RegisterService(listenOn string, c Conf) error {
 	pubListenOn := figureOutListenOn(listenOn)
 
 	host, ports, err := net.SplitHostPort(pubListenOn)
@@ -34,6 +34,7 @@ func RegitserService(listenOn string, c Conf) error {
 		ID:      serviceID, // 服务节点的名称
 		Name:    c.Key,     // 服务名称
 		Tags:    c.Tag,     // tag，可以为空
+		Meta:    c.Meta,    // meta， 可以为空
 		Port:    int(port), // 服务端口
 		Address: host,      // 服务 IP
 		Checks: []*api.AgentServiceCheck{ // 健康检查

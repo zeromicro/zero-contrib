@@ -3,15 +3,17 @@ package consul
 import "errors"
 
 const (
-	allEths  = "0.0.0.0"
-	envPodIP = "POD_IP"
+	allEths    = "0.0.0.0"
+	envPodIP   = "POD_IP"
+	consulTags = "consul_tags"
 )
 
 // Conf is the config item with the given key on etcd.
 type Conf struct {
 	Host string
 	Key  string
-	Tag  []string `json:",optional"`
+	Tag  []string          `json:",optional"`
+	Meta map[string]string `json:",optional"`
 }
 
 // Validate validates c.

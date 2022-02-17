@@ -29,7 +29,7 @@ func (b *builder) Build(url resolver.Target, cc resolver.ClientConn, opts resolv
 	}
 	cli.Health()
 	ctx, cancel := context.WithCancel(context.Background())
-	pipe := make(chan []string)
+	pipe := make(chan []*consulAddr)
 	go watchConsulService(ctx, cli.Health(), tgt, pipe)
 	go populateEndpoints(ctx, cc, pipe)
 
