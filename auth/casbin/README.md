@@ -47,6 +47,6 @@ action on what object. In this plugin, the meanings are:
 For how to write authorization policy and other details, please refer
 to [the Casbin's documentation](https://github.com/casbin/casbin).
 
-# Gratitude
+gratitude:
 
 - https://github.com/gin-contrib/authz
