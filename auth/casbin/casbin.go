@@ -18,6 +18,7 @@ func NewAuthorizer(e *casbin.Enforcer) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			if !a.CheckPermission(request) {
 				a.RequirePermission(writer)
+				return
 			}
 			next.ServeHTTP(writer, request)
 		})
