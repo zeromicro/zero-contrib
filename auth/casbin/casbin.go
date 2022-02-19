@@ -24,8 +24,7 @@ func NewAuthorizer(e *casbin.Enforcer) func(http.Handler) http.Handler {
 	}
 }
 
-// GetUserName gets the username from the request.
-// Currently, only HTTP basic authentication is supported
+// GetUserName gets the username from the JWT Claims.
 func (a *Authorizer) GetUserName(r *http.Request) (string, bool) {
 	username, ok := r.Context().Value("username").(string)
 
