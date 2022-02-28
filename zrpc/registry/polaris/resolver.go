@@ -60,21 +60,41 @@ func (watcher *polarisServiceWatcher) startWatch(ctx context.Context, consumer a
 		case event := <-resp.EventChannel:
 			eType := event.GetSubScribeEventType()
 			if eType == api.EventInstance {
-				insEvent := event.(*model.InstanceEvent)
-				ee := make([]string, len(insEvent.AddEvent.Instances)+len(insEvent.UpdateEvent.UpdateList))
+				var insEvent, ok = event.(*model.InstanceEvent)
+				if !ok {
+					logx.Errorf("event not `*model.InstanceEvent`")
+					continue
+				}
+				if insEvent == nil {
+					logx.Errorf("insEvent is nil")
+					continue
+				}
+
+				var (
+					insAddrList []string
+					insCount    int
+				)
+				if insEvent.AddEvent != nil {
+					insCount += len(insEvent.AddEvent.Instances)
+				}
+				if insEvent.UpdateEvent != nil {
+					insCount += len(insEvent.UpdateEvent.UpdateList)
+				}
+				insAddrList = make([]string, insCount)
+
 				if insEvent.AddEvent != nil {
 					for _, s := range insEvent.AddEvent.Instances {
-						ee = append(ee, fmt.Sprintf("%s:%d", s.GetHost(), s.GetPort()))
+						insAddrList = append(insAddrList, fmt.Sprintf("%s:%d", s.GetHost(), s.GetPort()))
 					}
 				}
 				if insEvent.UpdateEvent != nil {
 					for _, s := range insEvent.UpdateEvent.UpdateList {
-						ee = append(ee, fmt.Sprintf("%s:%d", s.After.GetHost(), s.After.GetPort()))
+						insAddrList = append(insAddrList, fmt.Sprintf("%s:%d", s.After.GetHost(), s.After.GetPort()))
 					}
 				}
 
-				if len(ee) != 0 {
-					watcher.out <- ee
+				if len(insAddrList) != 0 {
+					watcher.out <- insAddrList
 				}
 			}
 		}
