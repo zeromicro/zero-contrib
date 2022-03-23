@@ -47,7 +47,7 @@ func main() {
 
 	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
       // 注册服务
-      _ = consul.RegitserService(c.ListenOn, c.Consul)
+      _ = consul.RegisterService(c.ListenOn, c.Consul)
 	})
 
 	server.Start()
