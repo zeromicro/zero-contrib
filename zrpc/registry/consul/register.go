@@ -60,7 +60,7 @@ func RegisterService(listenOn string, c Conf) error {
 
 	// routine to update ttl
 	go func() {
-		ticker := time.NewTicker(time.Second * 20)
+		ticker := time.NewTicker(time.Second * 10)
 		defer ticker.Stop()
 		for {
 			<-ticker.C
