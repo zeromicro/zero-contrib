@@ -10,21 +10,19 @@ go get -u github.com/zeromicro/zero-contrib/zrpc/registry/consul
 
 For example:
 
-## Service
+## 修改RPC服务的代码
 
 - etc/\*.yaml
 
 ```yaml
   Consul:
-  Host: 192.168.100.15:8500
-  Key:consul.rpc
+  Host: 127.0.0.1:8500 # consul endpoint
+  Key: add.rpc # 注册到consul的服务名字
   Meta:
     Protocol: grpc
   Tag:
-    -
-      tag
+    - tag
       rpc
-
 ```
 
 - internal/config/config.go
@@ -48,16 +46,15 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 
 	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-
+      // 注册服务
+      _ = consul.RegitserService(c.ListenOn, c.Consul)
 	})
-	// 注册服务
-	_ = consul.RegitserService(c.ListenOn, c.Consul)
 
 	server.Start()
 }
 ```
 
-## Client
+## 修改API服务里的代码
 
 - main.go
 
@@ -69,5 +66,9 @@ import _ "github.com/zeromicro/zero-contrib/zrpc/registry/consul"
 
 ```yaml
 # consul://[user:passwd]@host/service?param=value'
-Target: consul://192.168.100.15:8500/consul.rpc?wait=14s
+# 类似这样的格式
+Add:
+  Target: consul://127.0.0.1:8500/add.rpc?wait=14s
+Check:
+  Target: consul://127.0.0.1:8500/check.rpc?wait=14s
 ```
