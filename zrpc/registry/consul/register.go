@@ -73,13 +73,7 @@ func RegisterService(listenOn string, c Conf) error {
 	}()
 	// consul deregister
 	proc.AddShutdownListener(func() {
-		err := client.Agent().CheckDeregister(serviceID)
-		if err != nil {
-			logx.Info("deregister check error: ", err.Error())
-		}
-		logx.Info("deregistered check from consul server.")
-
-		err = client.Agent().ServiceDeregister(serviceID)
+		err := client.Agent().ServiceDeregister(serviceID)
 		if err != nil {
 			logx.Info("deregister service error: ", err.Error())
 		}
