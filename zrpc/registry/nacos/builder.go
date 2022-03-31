@@ -27,7 +27,7 @@ type builder struct{}
 
 func (b *builder) Build(url resolver.Target, conn resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
 	dsn := strings.Join([]string{schemeName + ":/", url.Authority, url.Endpoint}, "/")
-	tgt, err := parseURL(dsn)
+	tgt, err := parseURL(strings.Join([]string{dsn, url.URL.RawQuery}, "?"))
 	if err != nil {
 		return nil, errors.Wrap(err, "Wrong nacos URL")
 	}
