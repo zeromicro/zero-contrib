@@ -3,15 +3,13 @@ package nacos
 import (
 	"context"
 	"fmt"
-	"net"
-	"strconv"
-	"strings"
-
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc/resolver"
+	"net"
+	"strconv"
 )
 
 func init() {
@@ -26,7 +24,7 @@ const schemeName = "nacos"
 type builder struct{}
 
 func (b *builder) Build(url resolver.Target, conn resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
-	dsn := strings.Join([]string{schemeName + ":/", url.Authority, url.Endpoint}, "/")
+	dsn := url.URL.Scheme + "://" + url.URL.Host + url.URL.RequestURI()
 	tgt, err := parseURL(dsn)
 	if err != nil {
 		return nil, errors.Wrap(err, "Wrong nacos URL")
