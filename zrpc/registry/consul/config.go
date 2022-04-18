@@ -1,6 +1,8 @@
 package consul
 
-import "errors"
+import (
+	"errors"
+)
 
 const (
 	allEths    = "0.0.0.0"

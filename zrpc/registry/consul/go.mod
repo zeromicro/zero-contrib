@@ -6,8 +6,8 @@ require (
 	github.com/hashicorp/consul/api v1.12.0
 	github.com/jpillora/backoff v1.0.0
 	github.com/pkg/errors v0.9.1
-	github.com/zeromicro/go-zero v1.3.0
-	google.golang.org/grpc v1.43.0
+	github.com/zeromicro/go-zero v1.3.2
+	google.golang.org/grpc v1.44.0
 )
 
 require (
