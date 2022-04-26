@@ -70,15 +70,21 @@ func RegisterService(listenOn string, c Conf) error {
 		ttlTicker = time.Second
 	}
 	// routine to update ttl
+	stop := make(chan struct{})
 	go func() {
 		ticker := time.NewTicker(ttlTicker)
 		defer ticker.Stop()
 		for {
-			<-ticker.C
-			err = client.Agent().UpdateTTL(serviceID, "", "passing")
-			logx.Info("update ttl")
-			if err != nil {
-				logx.Infof("update ttl of service error: %v", err.Error())
+			select {
+			case <-stop:
+				logx.Info("service deregistered, stop ttl")
+				return
+			case <-ticker.C:
+				err = client.Agent().UpdateTTL(serviceID, "", "passing")
+				logx.Info("update ttl")
+				if err != nil {
+					logx.Infof("update ttl of service error: %v", err.Error())
+				}
 			}
 		}
 	}()
@@ -94,6 +100,7 @@ func RegisterService(listenOn string, c Conf) error {
 		if err != nil {
 			logx.Info("deregister check error: ", err.Error())
 		}
+		stop <- struct{}{}
 	})
 
 	return nil
