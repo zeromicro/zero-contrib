@@ -11,7 +11,7 @@ go get -u github.com/zeromicro/go-zero
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/logx/zaplog
+go get -u github.com/zeromicro/zero-contrib/logx/logrusx
 ```
 
 For example:
@@ -24,12 +24,13 @@ import (
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/zero-contrib/logx/zaplog"
+	"github.com/zeromicro/zero-contrib/logx/logrusx"
 )
 
 func main() {
-	writer, err := zaplog.NewZapWriter()
-	logx.Must(err)
+	writer := logrusx.NewLogrusWriter(func(logger *logrus.Logger) {
+		logger.SetFormatter(&logrus.JSONFormatter{})
+	})
 	logx.SetWriter(writer)
 
 	logx.Infow("infow foo",

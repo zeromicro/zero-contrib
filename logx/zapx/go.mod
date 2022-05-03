@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/logx/zaplog
+module github.com/zeromicro/zero-contrib/logx/zapx
 
 go 1.15
 
