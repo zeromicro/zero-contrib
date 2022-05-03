@@ -32,8 +32,8 @@ func init() {
 	provider = p
 }
 
-// RegitserService register service to polaris
-func RegitserService(opts *Options) error {
+// RegisterService register service to polaris
+func RegisterService(opts *Options) error {
 	pubListenOn := figureOutListenOn(opts.ListenOn)
 
 	host, ports, err := net.SplitHostPort(pubListenOn)
