@@ -16,7 +16,8 @@ import (
 	"github.com/zeromicro/go-zero/core/netx"
 )
 
-func RegitserService(opts *Options) error {
+// RegisterService register service to nacos
+func RegisterService(opts *Options) error {
 	pubListenOn := figureOutListenOn(opts.ListenOn)
 
 	host, ports, err := net.SplitHostPort(pubListenOn)

@@ -14,6 +14,7 @@ import (
 	"github.com/zeromicro/go-zero/core/proc"
 )
 
+// RegisterService register service to consul
 func RegisterService(listenOn string, c Conf) error {
 	pubListenOn := figureOutListenOn(listenOn)
 

@@ -1,6 +1,6 @@
 ### Quick Start
 
-Prerequesites:
+Prerequisites:
 
 Download the module:
 
@@ -26,7 +26,7 @@ func main() {
 	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 
 	})
-	// 注册服务
+    // register service to nacos
 	sc := []constant.ServerConfig{
 		*constant.NewServerConfig("192.168.100.15", 8848),
 	}
@@ -43,7 +43,7 @@ func main() {
 	}
 
 	opts := nacos.NewNacosConfig("nacos.rpc", c.ListenOn, sc, cc)
-	_ = nacos.RegitserService(opts)
+	_ = nacos.RegisterService(opts)
 	server.Start()
 }
 ```
