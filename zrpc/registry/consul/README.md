@@ -50,7 +50,7 @@ func main() {
 	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 
 	})
-    // register service to consul
+    	// register service to consul
 	_ = consul.RegisterService(c.ListenOn, c.Consul)
 
 	server.Start()
