@@ -26,7 +26,7 @@ func main() {
 	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 
 	})
-    // register service to nacos
+	// register service to nacos
 	sc := []constant.ServerConfig{
 		*constant.NewServerConfig("192.168.100.15", 8848),
 	}
