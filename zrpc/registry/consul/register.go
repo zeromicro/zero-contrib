@@ -14,6 +14,7 @@ import (
 	"github.com/zeromicro/go-zero/core/proc"
 )
 
+// RegisterService register service to consul
 func RegisterService(listenOn string, c Conf) error {
 	pubListenOn := figureOutListenOn(listenOn)
 
@@ -30,6 +31,13 @@ func RegisterService(listenOn string, c Conf) error {
 	// 服务节点的名称
 	serviceID := fmt.Sprintf("%s-%s-%d", c.Key, host, port)
 
+	if c.TTL <= 0 {
+		c.TTL = 20
+	}
+
+	ttl := fmt.Sprintf("%ds", c.TTL)
+	expiredTTL := fmt.Sprintf("%ds", c.TTL*3)
+
 	reg := &api.AgentServiceRegistration{
 		ID:      serviceID, // 服务节点的名称
 		Name:    c.Key,     // 服务名称
@@ -40,9 +48,9 @@ func RegisterService(listenOn string, c Conf) error {
 		Checks: []*api.AgentServiceCheck{ // 健康检查
 			{
 				CheckID:                        serviceID, // 服务节点的名称
-				TTL:                            "30s",     // 健康检查间隔
+				TTL:                            ttl,       // 健康检查间隔
 				Status:                         "passing",
-				DeregisterCriticalServiceAfter: "90s", // 注销时间，相当于过期时间
+				DeregisterCriticalServiceAfter: expiredTTL, // 注销时间，相当于过期时间
 			},
 		},
 	}
@@ -52,15 +60,19 @@ func RegisterService(listenOn string, c Conf) error {
 	}
 
 	// initial register service check
-	check := api.AgentServiceCheck{TTL: "20s", Status: "passing", DeregisterCriticalServiceAfter: "90s"}
+	check := api.AgentServiceCheck{TTL: ttl, Status: "passing", DeregisterCriticalServiceAfter: expiredTTL}
 	err = client.Agent().CheckRegister(&api.AgentCheckRegistration{ID: serviceID, Name: c.Key, ServiceID: serviceID, AgentServiceCheck: check})
 	if err != nil {
 		return fmt.Errorf("initial register service check to consul error: %s", err.Error())
 	}
 
+	ttlTicker := time.Duration(c.TTL-1) * time.Second
+	if ttlTicker < time.Second {
+		ttlTicker = time.Second
+	}
 	// routine to update ttl
 	go func() {
-		ticker := time.NewTicker(time.Second * 20)
+		ticker := time.NewTicker(ttlTicker)
 		defer ticker.Stop()
 		for {
 			<-ticker.C

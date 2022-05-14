@@ -1,6 +1,8 @@
 package consul
 
-import "errors"
+import (
+	"errors"
+)
 
 const (
 	allEths    = "0.0.0.0"
@@ -14,15 +16,20 @@ type Conf struct {
 	Key  string
 	Tag  []string          `json:",optional"`
 	Meta map[string]string `json:",optional"`
+	TTL  int               `json:"ttl,optional"`
 }
 
 // Validate validates c.
 func (c Conf) Validate() error {
 	if len(c.Host) == 0 {
 		return errors.New("empty consul hosts")
-	} else if len(c.Key) == 0 {
-		return errors.New("empty consul key")
-	} else {
-		return nil
 	}
+	if len(c.Key) == 0 {
+		return errors.New("empty consul key")
+	}
+	if c.TTL == 0 {
+		c.TTL = 20
+	}
+
+	return nil
 }

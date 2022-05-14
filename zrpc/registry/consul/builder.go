@@ -2,7 +2,6 @@ package consul
 
 import (
 	"context"
-	"strings"
 
 	"github.com/hashicorp/consul/api"
 	"github.com/pkg/errors"
@@ -17,7 +16,8 @@ const schemeName = "consul"
 type builder struct{}
 
 func (b *builder) Build(url resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
-	dsn := strings.Join([]string{schemeName + ":/", url.Authority, url.Endpoint}, "/")
+	//	dsn := strings.Join([]string{schemeName + ":/", url.Authority, url.Endpoint}, "/")
+	dsn := url.URL.Scheme + "://" + url.URL.Host + url.URL.RequestURI()
 
 	tgt, err := parseURL(dsn)
 	if err != nil {

@@ -1,6 +1,6 @@
 ### Quick Start
 
-Prerequesites:
+Prerequisites:
 
 Download the module:
 
@@ -49,6 +49,8 @@ func main() {
       // 注册服务
       _ = consul.RegisterService(c.ListenOn, c.Consul)
 	})
+  // register service to consul
+	_ = consul.RegisterService(c.ListenOn, c.Consul)
 
 	server.Start()
 }

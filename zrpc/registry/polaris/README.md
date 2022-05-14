@@ -1,6 +1,6 @@
 ### Quick Start
 
-Prerequesites:
+Prerequisites:
 
 Download the module:
 
@@ -35,8 +35,8 @@ func main() {
 	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 
 	})
-	// 注册服务
-	_ = polaris.RegitserService(c.ListenOn, 
+	// register service to polaris
+	_ = polaris.RegisterService(c.ListenOn, 
                 polaris.WithServiceName("EchoServerZero"),
                 polaris.WithNamespace("default"),
             )
