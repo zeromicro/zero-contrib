@@ -101,7 +101,7 @@ func RegisterService(listenOn string, c Conf) error {
 		if err != nil {
 			logx.Info("deregister check error: ", err.Error())
 		}
-		stop <- struct{}{}
+		close(stop)
 	})
 
 	return nil
