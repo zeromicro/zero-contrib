@@ -100,6 +100,7 @@ func RegisterService(listenOn string, c Conf) error {
 			logx.Info("deregister check error: ", err.Error())
 		}
 		close(stop)
+		logx.Info("deregistered service from consul server.")
 	})
 
 	return nil
