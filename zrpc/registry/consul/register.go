@@ -94,13 +94,10 @@ func RegisterService(listenOn string, c Conf) error {
 		err := client.Agent().ServiceDeregister(serviceID)
 		if err != nil {
 			logx.Info("deregister service error: ", err.Error())
-		}
-		err = client.Agent().CheckDeregister(serviceID)
-		if err != nil {
-			logx.Info("deregister check error: ", err.Error())
+		} else {
+			logx.Info("deregistered service from consul server.")
 		}
 		close(stop)
-		logx.Info("deregistered service from consul server.")
 	})
 
 	return nil
