@@ -22,7 +22,7 @@ Consul:
     Protocol: grpc
   Tag:
     - tag
-      rpc
+    - rpc
 ```
 
 - internal/config/config.go
