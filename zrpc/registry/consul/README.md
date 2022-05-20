@@ -15,7 +15,7 @@ For example:
 - etc/\*.yaml
 
 ```yaml
-  Consul:
+Consul:
   Host: 127.0.0.1:8500 # consul endpoint
   Key: add.rpc # 注册到consul的服务名字
   Meta:
