@@ -26,7 +26,7 @@ import (
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zeromicro/zero-contrib/router/mux/router"
+	"github.com/zeromicro/zero-contrib/router/mux"
 	"net/http"
 )
 
@@ -36,7 +36,7 @@ type User struct {
 }
 
 func main() {
-	r := router.NewRouter()
+	r := mux.NewRouter()
 	engine := rest.MustNewServer(rest.RestConf{
 		ServiceConf: service.ServiceConf{
 			Log: logx.LogConf{
