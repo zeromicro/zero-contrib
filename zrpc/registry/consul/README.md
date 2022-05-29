@@ -15,14 +15,14 @@ For example:
 - etc/\*.yaml
 
 ```yaml
-  Consul:
+Consul:
   Host: 127.0.0.1:8500 # consul endpoint
   Key: add.rpc # 注册到consul的服务名字
   Meta:
     Protocol: grpc
   Tag:
     - tag
-      rpc
+    - rpc
 ```
 
 - internal/config/config.go
@@ -46,10 +46,9 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 
 	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-      // 注册服务
-      _ = consul.RegisterService(c.ListenOn, c.Consul)
+	
 	})
-  // register service to consul
+ 	// register service to consul
 	_ = consul.RegisterService(c.ListenOn, c.Consul)
 
 	server.Start()
