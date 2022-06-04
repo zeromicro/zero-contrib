@@ -113,7 +113,7 @@ func TestParseJsonPost(t *testing.T) {
 	r, err := http.NewRequest(http.MethodPost, "http://hello.com/kevin/2017?nickname=whatever&zipcode=200000",
 		bytes.NewBufferString(`{"location": "shanghai", "time": 20170912}`))
 	assert.Nil(t, err)
-	r.Header.Set(httpx.ContentType, httpx.ApplicationJson)
+	r.Header.Set(httpx.ContentType, httpx.JsonContentType)
 
 	router := NewRouter()
 	err = router.Handle(http.MethodPost, "/:name/:year", http.HandlerFunc(func(
@@ -145,7 +145,7 @@ func TestParseJsonPostWithIntSlice(t *testing.T) {
 	r, err := http.NewRequest(http.MethodPost, "http://hello.com/kevin/2017",
 		bytes.NewBufferString(`{"ages": [1, 2], "years": [3, 4]}`))
 	assert.Nil(t, err)
-	r.Header.Set(httpx.ContentType, httpx.ApplicationJson)
+	r.Header.Set(httpx.ContentType, httpx.JsonContentType)
 
 	router := NewRouter()
 	err = router.Handle(http.MethodPost, "/:name/:year", http.HandlerFunc(func(
@@ -173,7 +173,7 @@ func TestParseJsonPostError(t *testing.T) {
 	r, err := http.NewRequest(http.MethodPost, "http://hello.com/kevin/2017?nickname=whatever&zipcode=200000",
 		bytes.NewBufferString(payload))
 	assert.Nil(t, err)
-	r.Header.Set(httpx.ContentType, httpx.ApplicationJson)
+	r.Header.Set(httpx.ContentType, httpx.JsonContentType)
 
 	router := NewRouter()
 	err = router.Handle(http.MethodPost, "/:name/:year", http.HandlerFunc(

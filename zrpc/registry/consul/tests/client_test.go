@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -9,7 +10,8 @@ import (
 )
 
 func TestCLient(t *testing.T) {
-	conn, err := grpc.Dial("consul://127.0.0.1:8500/gozero?wait=14s&tag=public", grpc.WithInsecure(), grpc.WithBalancerName("round_robin"))
+	svcCfg := fmt.Sprintf(`{"loadBalancingPolicy":"%s"}`, "round_robin")
+	conn, err := grpc.Dial("consul://127.0.0.1:8500/gozero?wait=14s&tag=public", grpc.WithInsecure(), grpc.WithDefaultServiceConfig(svcCfg))
 	if err != nil {
 		t.Fatal(err)
 	}
