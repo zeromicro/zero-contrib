@@ -9,6 +9,7 @@ const (
 type Options struct {
 	ListenOn            string
 	Namespace           string
+	ServiceToken        string
 	ServiceName         string
 	Weight              float64
 	Protocol            string

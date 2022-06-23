@@ -36,10 +36,11 @@ func main() {
 
 	})
 	// register service to polaris
-	_ = polaris.RegisterService(c.ListenOn, 
-                polaris.WithServiceName("EchoServerZero"),
-                polaris.WithNamespace("default"),
-            )
+    opts := polaris.NewPolarisConfig(c.ListenOn)
+	opts.ServiceName = "EchoServerZero" 
+	opts.Namespace = "default"
+	opts.ServiceToken = "2af8fdf2534f451e8f01881d1b66f9ec"
+    _ = polaris.RegisterService(opts)
 
 	server.Start()
 }

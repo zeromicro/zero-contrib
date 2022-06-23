@@ -48,6 +48,7 @@ func RegisterService(opts *Options) error {
 
 	req := &api.InstanceRegisterRequest{}
 	req.Service = opts.ServiceName
+	req.ServiceToken = opts.ServiceToken
 	req.Namespace = opts.Namespace
 	req.Version = &opts.Version
 	req.Protocol = &opts.Protocol
