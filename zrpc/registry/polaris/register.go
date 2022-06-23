@@ -48,6 +48,7 @@ func RegisterService(opts *Options) error {
 
 	req := &api.InstanceRegisterRequest{}
 	req.Service = opts.ServiceName
+	req.ServiceToken = opts.ServiceToken
 	req.Namespace = opts.Namespace
 	req.Version = &opts.Version
 	req.Protocol = &opts.Protocol
@@ -59,22 +60,19 @@ func RegisterService(opts *Options) error {
 	if err != nil {
 		return err
 	}
-	if resp.Existed {
-		return nil
-	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	beatlock.Lock()
 	hearts[fmt.Sprintf("%s_%s_%s", opts.Namespace, opts.ServiceName, opts.ListenOn)] = cancel
 	beatlock.Unlock()
 
-	go doHeartbeat(ctx, req, opts)
+	go doHeartbeat(ctx, req, opts, resp.InstanceID)
 
-	addShutdownListener(req, opts)
+	addShutdownListener(req, opts, resp.InstanceID)
 	return nil
 }
 
-func addShutdownListener(registerReq *api.InstanceRegisterRequest, opts *Options) {
+func addShutdownListener(registerReq *api.InstanceRegisterRequest, opts *Options, instanceID string) {
 	// service deregister
 	proc.AddShutdownListener(func() {
 		beatlock.Lock()
@@ -85,6 +83,8 @@ func addShutdownListener(registerReq *api.InstanceRegisterRequest, opts *Options
 		req := &api.InstanceDeRegisterRequest{}
 		req.Namespace = opts.Namespace
 		req.Service = opts.ServiceName
+		req.ServiceToken = opts.ServiceToken
+		req.InstanceID = instanceID
 		req.Host = registerReq.Host
 		req.Port = registerReq.Port
 		provider.Deregister(req)
@@ -92,7 +92,7 @@ func addShutdownListener(registerReq *api.InstanceRegisterRequest, opts *Options
 }
 
 // doHeartbeat
-func doHeartbeat(ctx context.Context, req *api.InstanceRegisterRequest, opts *Options) {
+func doHeartbeat(ctx context.Context, req *api.InstanceRegisterRequest, opts *Options, instanceID string) {
 	ticker := time.NewTicker(time.Duration(opts.HeartbeatInervalSec * int(time.Second)))
 	for {
 		select {
@@ -102,6 +102,8 @@ func doHeartbeat(ctx context.Context, req *api.InstanceRegisterRequest, opts *Op
 			beatreq := &api.InstanceHeartbeatRequest{}
 			beatreq.Namespace = opts.Namespace
 			beatreq.Service = opts.ServiceName
+			beatreq.ServiceToken = opts.ServiceToken
+			beatreq.InstanceID = instanceID
 			beatreq.Host = req.Host
 			beatreq.Port = req.Port
 
