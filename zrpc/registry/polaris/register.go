@@ -48,6 +48,7 @@ func RegisterService(opts *Options) error {
 
 	req := &api.InstanceRegisterRequest{}
 	req.Service = opts.ServiceName
+	req.ServiceToken = opts.ServiceToken
 	req.Namespace = opts.Namespace
 	req.Version = &opts.Version
 	req.Protocol = &opts.Protocol
@@ -102,6 +103,7 @@ func doHeartbeat(ctx context.Context, req *api.InstanceRegisterRequest, opts *Op
 			beatreq := &api.InstanceHeartbeatRequest{}
 			beatreq.Namespace = opts.Namespace
 			beatreq.Service = opts.ServiceName
+			beatreq.ServiceToken = opts.ServiceToken
 			beatreq.Host = req.Host
 			beatreq.Port = req.Port
 
