@@ -23,7 +23,7 @@ import (
 	"context"
 	"github.com/rs/zerolog"
 	"github.com/zeromicro/go-zero/core/logx"
-	zerologx "github.com/zeromicro/zero-contrib/logx/zapx"
+	"github.com/zeromicro/zero-contrib/logx/zerologx"
 	"os"
 	"time"
 )
