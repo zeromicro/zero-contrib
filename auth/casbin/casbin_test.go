@@ -2,11 +2,12 @@ package casbin
 
 import (
 	"context"
-	"github.com/casbin/casbin/v2"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/casbin/casbin/v2"
+	"github.com/stretchr/testify/assert"
 )
 
 func testAuthWithUsernameRequest(t *testing.T, router http.Handler, user string, path string, method string, code int) {
@@ -17,6 +18,17 @@ func testAuthWithUsernameRequest(t *testing.T, router http.Handler, user string,
 
 	if w.Code != code {
 		t.Errorf("%s, %s, %s: %d, supposed to be %d", user, path, method, w.Code, code)
+	}
+}
+func testDomainAuthWithUsernameRequest(t *testing.T, router http.Handler, user string, domain string, path string, method string, code int) {
+	r, _ := http.NewRequestWithContext(context.Background(), method, path, nil)
+	ctx := context.WithValue(r.Context(), "username", user)
+	request := r.WithContext(context.WithValue(ctx, "domain", domain))
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, request)
+
+	if w.Code != code {
+		t.Errorf("%s, %s,%s, %s: %d, supposed to be %d", user, domain, path, method, w.Code, code)
 	}
 }
 
@@ -36,6 +48,26 @@ func TestBasic(t *testing.T) {
 	testAuthWithUsernameRequest(t, router, "alice", "/dataset1/resource1", "POST", 200)
 	testAuthWithUsernameRequest(t, router, "alice", "/dataset1/resource2", "GET", 200)
 	testAuthWithUsernameRequest(t, router, "alice", "/dataset1/resource2", "POST", 403)
+}
+
+func TestBasicDomain(t *testing.T) {
+	e, err := casbin.NewEnforcer("auth_model_domain.conf", "auth_policy_domain.csv")
+	if err != nil {
+		t.Fatal(err)
+	}
+	router := NewAuthorizer(e, WithUidField("username"), WithDomain("domain"))(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("X-Test", "test")
+			_, err := w.Write([]byte("content"))
+			assert.Nil(t, err)
+
+			flusher, ok := w.(http.Flusher)
+			assert.True(t, ok)
+			flusher.Flush()
+		}))
+	testDomainAuthWithUsernameRequest(t, router, "alice", "go-zero", "/dataset1/resource1", "POST", 200)
+	testDomainAuthWithUsernameRequest(t, router, "bob", "domain1", "/dataset2/resource1", "POST", 200)
+	testDomainAuthWithUsernameRequest(t, router, "alice", "go-zero", "/dataset1/resource2", "POST", 200)
 }
 
 func TestPathWildcard(t *testing.T) {
