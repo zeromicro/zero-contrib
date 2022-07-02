@@ -11,7 +11,7 @@ import (
 
 func Test_Log(t *testing.T) {
 	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
-	writer := NewZeroLogWrite(logger)
+	writer := NewZeroLogWriter(logger)
 	logx.SetWriter(writer)
 
 	logx.Infow("infow foo",

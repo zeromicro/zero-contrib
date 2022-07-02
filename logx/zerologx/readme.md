@@ -30,7 +30,7 @@ import (
 
 func main() {
 	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
-	writer := zerologx.NewZeroLogWrite(logger)
+	writer := zerologx.NewZeroLogWriter(logger)
 	logx.SetWriter(writer)
 
 	logx.Infow("infow foo",
