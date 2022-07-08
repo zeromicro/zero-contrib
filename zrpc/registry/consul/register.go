@@ -24,7 +24,7 @@ func RegisterService(listenOn string, c Conf) error {
 	}
 	port, _ := strconv.ParseUint(ports, 10, 16)
 
-	client, err := api.NewClient(&api.Config{Scheme: "http", Address: c.Host})
+	client, err := api.NewClient(&api.Config{Scheme: "http", Address: c.Host, Token: c.Token})
 	if err != nil {
 		return fmt.Errorf("create consul client error: %v", err)
 	}
