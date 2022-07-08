@@ -30,8 +30,8 @@ Consul:
 
 ```go
 type Config struct {
-zrpc.RpcServerConf
-Consul consul.Conf
+    zrpc.RpcServerConf
+    Consul consul.Conf
 }
 ```
 
