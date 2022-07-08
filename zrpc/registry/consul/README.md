@@ -41,18 +41,18 @@ Consul consul.Conf
 import _ "github.com/zeromicro/zero-contrib/zrpc/registry/consul"
 
 func main() {
-flag.Parse()
+	flag.Parse()
 
-var c config.Config
-conf.MustLoad(*configFile, &c)
+	var c config.Config
+	conf.MustLoad(*configFile, &c)
 
-server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
+	server := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
+	
+	})
+ 	// register service to consul
+	_ = consul.RegisterService(c.ListenOn, c.Consul)
 
-})
-// register service to consul
-_ = consul.RegisterService(c.ListenOn, c.Consul)
-
-server.Start()
+	server.Start()
 }
 ```
 
@@ -109,4 +109,3 @@ service "check.rpc" {
 	policy = "read"
 }
 ```
-
