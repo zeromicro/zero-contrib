@@ -30,8 +30,8 @@ Consul:
 
 ```go
 type Config struct {
-	zrpc.RpcServerConf
-	Consul consul.Conf
+    zrpc.RpcServerConf
+    Consul consul.Conf
 }
 ```
 
@@ -53,6 +53,19 @@ func main() {
 	_ = consul.RegisterService(c.ListenOn, c.Consul)
 
 	server.Start()
+}
+```
+
+### ACL Token
+
+the token need contain the **service** policy of `"write"`
+
+```
+service "add.rpc" {
+  policy = "write"
+}
+service "check.rpc" {
+  policy = "write"
 }
 ```
 
@@ -79,4 +92,20 @@ Add:
   Target: consul://127.0.0.1:8500/add.rpc?wait=14s&token=f0512db6-76d6-f25e-f344-a98cc3484d42
 Check:
   Target: consul://127.0.0.1:8500/check.rpc?wait=14s&token=f0512db6-76d6-f25e-f344-a98cc3484d42
+```
+
+### ACL Token
+
+the token need contain the **node** and **service** policy of `"read"`
+
+```
+node "consul-server" {
+  policy = "read"
+}
+service "add.rpc" {
+	policy = "read"
+}
+service "check.rpc" {
+	policy = "read"
+}
 ```
