@@ -12,11 +12,12 @@ const (
 
 // Conf is the config item with the given key on etcd.
 type Conf struct {
-	Host string
-	Key  string
-	Tag  []string          `json:",optional"`
-	Meta map[string]string `json:",optional"`
-	TTL  int               `json:"ttl,optional"`
+	Host  string
+	Key   string
+	Token string            `json:",optional"`
+	Tag   []string          `json:",optional"`
+	Meta  map[string]string `json:",optional"`
+	TTL   int               `json:"ttl,optional"`
 }
 
 // Validate validates c.

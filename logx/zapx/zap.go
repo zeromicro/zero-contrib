@@ -1,4 +1,4 @@
-package zaplog
+package zapx
 
 import (
 	"fmt"

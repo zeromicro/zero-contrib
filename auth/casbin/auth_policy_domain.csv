@@ -1,0 +1,10 @@
+p, alice,go-zero, /dataset1/resource1, POST
+p, admin,go-zero, /dataset1/resource2, *
+p, bob,domain1, /dataset2/resource1, POST
+p, bob,domain2, /dataset2/resource2, GET
+p, bob,go-zero, /dataset2/folder1/*, POST
+p, dataset1_admin,domain2, /dataset1/*, *
+
+g, cathy,domain1, dataset1_admin
+g, alice, admin, go-zero
+g, bob, admin, domain2

@@ -1,15 +1,15 @@
-module github.com/zeromicro/zero-contrib/logx/logrusx
+module github.com/zeromicro/zero-contrib/logx/zerologx
 
 go 1.18
 
 require (
-	github.com/sirupsen/logrus v1.8.1
+	github.com/rs/zerolog v1.27.0
 	github.com/zeromicro/go-zero v1.3.4
 )
 
 require (
 	github.com/fatih/color v1.13.0 // indirect
-	github.com/mattn/go-colorable v0.1.9 // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect

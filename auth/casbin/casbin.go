@@ -1,9 +1,11 @@
 package casbin
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/casbin/casbin/v2"
 	"github.com/zeromicro/go-zero/core/logx"
-	"net/http"
 )
 
 type (
@@ -11,6 +13,7 @@ type (
 	Authorizer struct {
 		enforcer *casbin.Enforcer
 		uidField string
+		domain   string
 	}
 	// AuthorizerOption represents an option.
 	AuthorizerOption func(opt *Authorizer)
@@ -20,6 +23,13 @@ type (
 func WithUidField(uidField string) AuthorizerOption {
 	return func(opt *Authorizer) {
 		opt.uidField = uidField
+	}
+}
+
+// WithDomain returns a custom domain option.
+func WithDomain(domain string) AuthorizerOption {
+	return func(opt *Authorizer) {
+		opt.domain = domain
 	}
 }
 
@@ -42,7 +52,7 @@ func NewAuthorizer(e *casbin.Enforcer, opts ...AuthorizerOption) func(http.Handl
 
 func (a *Authorizer) init(opts ...AuthorizerOption) {
 	a.uidField = "username"
-
+	a.domain = "domain"
 	for _, opt := range opts {
 		opt(a)
 	}
@@ -51,8 +61,13 @@ func (a *Authorizer) init(opts ...AuthorizerOption) {
 // GetUid gets the uid from the JWT Claims.
 func (a *Authorizer) GetUid(r *http.Request) (string, bool) {
 	uid, ok := r.Context().Value(a.uidField).(string)
-
 	return uid, ok
+}
+
+// GetDomain returns the domain from the request.
+func (a *Authorizer) GetDomain(r *http.Request) (string, bool) {
+	domain, ok := r.Context().Value(a.domain).(string)
+	return domain, ok
 }
 
 // CheckPermission checks the user/method/path combination from the request.
@@ -64,12 +79,21 @@ func (a *Authorizer) CheckPermission(r *http.Request) bool {
 	}
 	method := r.Method
 	path := r.URL.Path
+	var (
+		allowed = false
+		err     error
+	)
+	domain, withDomain := a.GetDomain(r)
+	log.Println("domain:", domain)
+	if withDomain {
+		allowed, err = a.enforcer.Enforce(uid, domain, path, method)
+	} else {
+		allowed, err = a.enforcer.Enforce(uid, path, method)
+	}
 
-	allowed, err := a.enforcer.Enforce(uid, path, method)
 	if err != nil {
 		logx.WithContext(r.Context()).Errorf("[CASBIN] enforce err %s", err.Error())
 	}
-
 	return allowed
 }
 

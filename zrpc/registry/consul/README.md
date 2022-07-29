@@ -17,7 +17,8 @@ For example:
 ```yaml
 Consul:
   Host: 127.0.0.1:8500 # consul endpoint
-  Key: add.rpc # 注册到consul的服务名字
+  Token: 'f0512db6-76d6-f25e-f344-a98cc3484d42' # consul ACL token (optional)
+  Key: add.rpc # service name registered to Consul
   Meta:
     Protocol: grpc
   Tag:
@@ -67,9 +68,15 @@ import _ "github.com/zeromicro/zero-contrib/zrpc/registry/consul"
 
 ```yaml
 # consul://[user:passwd]@host/service?param=value'
-# 类似这样的格式
+# format like this
 Add:
   Target: consul://127.0.0.1:8500/add.rpc?wait=14s
 Check:
   Target: consul://127.0.0.1:8500/check.rpc?wait=14s
+  
+# ACL token support
+Add:
+  Target: consul://127.0.0.1:8500/add.rpc?wait=14s&token=f0512db6-76d6-f25e-f344-a98cc3484d42
+Check:
+  Target: consul://127.0.0.1:8500/check.rpc?wait=14s&token=f0512db6-76d6-f25e-f344-a98cc3484d42
 ```
