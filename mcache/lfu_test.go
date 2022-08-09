@@ -296,7 +296,7 @@ func TestLFUResize(t *testing.T) {
 	}
 }
 
-// LFU 性能压测
+// SimpleLFU 性能压测
 func TestLFU_Performance(t *testing.T) {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
@@ -313,7 +313,7 @@ func TestLFU_Performance(t *testing.T) {
 	//stopper4 := profile.Start(profile.MemProfile, profile.ProfilePath("."))
 	//defer stopper4.Stop()
 
-	count := 10000000
+	count := 100000
 	l, _ := NewLFU(20000)
 
 	wg := &sync.WaitGroup{}

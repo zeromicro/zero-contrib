@@ -313,7 +313,7 @@ func TestLRU_Performance(t *testing.T) {
 	//stopper4 := profile.Start(profile.MemProfile, profile.ProfilePath("."))
 	//defer stopper4.Stop()
 
-	count := 10000000
+	count := 100000
 	l, _ := NewLRU(20000)
 
 	wg := &sync.WaitGroup{}

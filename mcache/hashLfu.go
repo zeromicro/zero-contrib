@@ -2,7 +2,6 @@ package mcache
 
 import (
 	"crypto/md5"
-	"github.com/songangweb/mcache/simplelfu"
 	"math"
 	"runtime"
 	"sync"
@@ -16,11 +15,11 @@ type HashLfuCache struct {
 }
 
 type HashLfuCacheOne struct {
-	lfu  simplelfu.LFUCache
+	lfu  SimpleLFUCache
 	lock sync.RWMutex
 }
 
-// NewHashLFU creates an LFU of the given size.
+// NewHashLFU creates an SimpleLFU of the given size.
 func NewHashLFU(size, sliceNum int) (*HashLfuCache, error) {
 	return NewHashLfuWithEvict(size, sliceNum, nil)
 }
@@ -41,7 +40,7 @@ func NewHashLfuWithEvict(size, sliceNum int, onEvicted func(key interface{}, val
 	h.sliceNum = sliceNum
 	h.list = make([]*HashLfuCacheOne, sliceNum)
 	for i := 0; i < sliceNum; i++ {
-		l, _ := simplelfu.NewLFU(lfuLen, onEvicted)
+		l, _ := NewSimpleLFU(lfuLen, onEvicted)
 		h.list[i] = &HashLfuCacheOne{
 			lfu: l,
 		}

@@ -3,8 +3,6 @@ package mcache
 import (
 	"fmt"
 	"sync"
-
-	"github.com/songangweb/mcache/simplelru"
 )
 
 const (
@@ -18,11 +16,11 @@ const (
 )
 
 // TwoQueueCache is a thread-safe fixed size 2Q cache.
-// 2Q is an enhancement over the standard LRU cache
+// 2Q is an enhancement over the standard SimpleLRU cache
 // in that it tracks both frequently and recently used
 // entries separately. This avoids a burst in access to new
 // entries from evicting frequently used entries. It adds some
-// additional tracking overhead to the standard LRU cache, and is
+// additional tracking overhead to the standard SimpleLRU cache, and is
 // computationally about 2x the cost, and adds some metadata over
 // head. The ARCCache is similar, but does not require setting any
 // parameters.
@@ -30,9 +28,9 @@ type TwoQueueCache struct {
 	size       int
 	recentSize int
 
-	recent      simplelru.LRUCache
-	frequent    simplelru.LRUCache
-	recentEvict simplelru.LRUCache
+	recent      SimpleLRUCache
+	frequent    SimpleLRUCache
+	recentEvict SimpleLRUCache
 	lock        sync.RWMutex
 }
 
@@ -60,15 +58,15 @@ func New2QParams(size int, recentRatio float64, ghostRatio float64) (*TwoQueueCa
 	evictSize := int(float64(size) * ghostRatio)
 
 	// Allocate the LRUs
-	recent, err := simplelru.NewLRU(size, nil)
+	recent, err := NewSimpleLRU(size, nil)
 	if err != nil {
 		return nil, err
 	}
-	frequent, err := simplelru.NewLRU(size, nil)
+	frequent, err := NewSimpleLRU(size, nil)
 	if err != nil {
 		return nil, err
 	}
-	recentEvict, err := simplelru.NewLRU(evictSize, nil)
+	recentEvict, err := NewSimpleLRU(evictSize, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +105,7 @@ func (c *TwoQueueCache) Get(key interface{}) (value interface{}, expirationTime 
 }
 
 // Add adds a value to the cache.
-func (c *TwoQueueCache) Add(key, value interface{}, expirationTime int64,) {
+func (c *TwoQueueCache) Add(key, value interface{}, expirationTime int64) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 

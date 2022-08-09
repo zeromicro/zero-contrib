@@ -1,17 +1,16 @@
 package mcache
 
 import (
-	"github.com/songangweb/mcache/simplelfu"
 	"sync"
 )
 
-// LfuCache is a thread-safe fixed size LRU cache.
+// LfuCache is a thread-safe fixed size SimpleLRU cache.
 type LfuCache struct {
-	lfu  simplelfu.LFUCache
+	lfu  SimpleLFUCache
 	lock sync.RWMutex
 }
 
-// NewLFU creates an LRU of the given size.
+// NewLFU creates an SimpleLRU of the given size.
 func NewLFU(size int) (*LfuCache, error) {
 	return NewLfuWithEvict(size, nil)
 }
@@ -19,7 +18,7 @@ func NewLFU(size int) (*LfuCache, error) {
 // NewLfuWithEvict constructs a fixed size cache with the given eviction
 // callback.
 func NewLfuWithEvict(size int, onEvicted func(key interface{}, value interface{}, expirationTime int64)) (*LfuCache, error) {
-	lfu, _ := simplelfu.NewLFU(size, simplelfu.EvictCallback(onEvicted))
+	lfu, _ := NewSimpleLFU(size, SimpleLFUEvictCallback(onEvicted))
 	c := &LfuCache{
 		lfu: lfu,
 	}
@@ -134,7 +133,7 @@ func (c *LfuCache) RemoveOldest() (key interface{}, value interface{}, expiratio
 	return
 }
 
-// GetOldest returns the oldest entry
+// GetOldest returns the oldest simpleLFUEntry
 func (c *LfuCache) GetOldest() (key interface{}, value interface{}, expirationTime int64, ok bool) {
 	c.lock.Lock()
 	key, value, expirationTime, ok = c.lfu.GetOldest()

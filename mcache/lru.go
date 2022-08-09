@@ -1,13 +1,12 @@
 package mcache
 
 import (
-	"github.com/songangweb/mcache/simplelru"
 	"sync"
 )
 
-// LruCache is a thread-safe fixed size LRU cache.
+// LruCache is a thread-safe fixed size SimpleLRU cache.
 type LruCache struct {
-	lru  simplelru.LRUCache
+	lru  SimpleLRUCache
 	lock sync.RWMutex
 }
 
@@ -19,7 +18,7 @@ func NewLRU(size int) (*LruCache, error) {
 // NewLruWithEvict constructs a fixed size cache with the given eviction
 // callback.
 func NewLruWithEvict(size int, onEvicted func(key interface{}, value interface{}, expirationTime int64)) (*LruCache, error) {
-	lru, err := simplelru.NewLRU(size, simplelru.EvictCallback(onEvicted))
+	lru, err := NewSimpleLRU(size, SimpleLRUEvictCallback(onEvicted))
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +130,7 @@ func (c *LruCache) RemoveOldest() (key interface{}, value interface{}, expiratio
 	return
 }
 
-// GetOldest returns the oldest entry
+// GetOldest returns the oldest simpleLFUEntry
 func (c *LruCache) GetOldest() (key interface{}, value interface{}, expirationTime int64, ok bool) {
 	c.lock.Lock()
 	key, value, expirationTime, ok = c.lru.GetOldest()

@@ -1,6 +1,6 @@
-package simplelru
+package mcache
 
-type LRUCache interface {
+type SimpleLRUCache interface {
 	Add(key, value interface{}, expirationTime int64) (ok bool)
 
 	Get(key interface{}) (value interface{}, expirationTime int64, ok bool)

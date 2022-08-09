@@ -295,7 +295,7 @@ func TestHashLFU_Performance(t *testing.T) {
 	//stopper4 := profile.Start(profile.MemProfile, profile.ProfilePath("."))
 	//defer stopper4.Stop()
 
-	count := 10000000
+	count := 100000
 	l, _ := NewHashLFU(20000, 64)
 
 	wg := &sync.WaitGroup{}

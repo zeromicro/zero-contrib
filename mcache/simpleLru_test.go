@@ -1,4 +1,4 @@
-package simplelfu
+package mcache
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestLFU(t *testing.T) {
+func TestSimpleLRU(t *testing.T) {
 
 	initTime := initTime()
 	evictCounter := 0
@@ -16,18 +16,14 @@ func TestLFU(t *testing.T) {
 		}
 		evictCounter++
 	}
-	l, err := NewLFU(128, onEvicted)
+	l, err := NewSimpleLRU(128, onEvicted)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
 
 	for i := 0; i < 256; i++ {
 		l.Add(i, i, initTime)
-		for c := 0; c < i; c++ {
-			l.Get(i)
-		}
 	}
-
 	if l.Len() != 128 {
 		t.Fatalf("bad len: %v", l.Len())
 	}
@@ -38,7 +34,7 @@ func TestLFU(t *testing.T) {
 
 	for i, k := range l.Keys() {
 		if v, expirationTime, ok := l.Get(k); !ok || v != k || v != i+128 {
-			t.Fatalf("bad i: %v, key: %v, v: %v, time: %v", i, k, v, expirationTime)
+			t.Fatalf("bad key: %v, time: %v", k, expirationTime)
 		}
 	}
 	for i := 0; i < 128; i++ {
@@ -53,7 +49,6 @@ func TestLFU(t *testing.T) {
 			t.Fatalf("should not be evicted, time: %v", expirationTime)
 		}
 	}
-
 	for i := 128; i < 192; i++ {
 		ok := l.Remove(i)
 		if !ok {
@@ -69,10 +64,11 @@ func TestLFU(t *testing.T) {
 		}
 	}
 
-	l.Get(192) // expect 192 to be first key in l.Keys()
+	l.Get(192) // expect 192 to be last key in l.Keys()
+
 	for i, k := range l.Keys() {
-		if i < 63 && k != 192+i {
-			t.Fatalf("out of order i:% v ,key: %v", i, k)
+		if (i < 63 && k != i+193) || (i == 63 && k != 192) {
+			t.Fatalf("out of order key: %v", k)
 		}
 	}
 
@@ -85,18 +81,15 @@ func TestLFU(t *testing.T) {
 	}
 }
 
-func TestLFU_GetOldest_RemoveOldest(t *testing.T) {
+func TestLRU_GetOldest_RemoveOldest(t *testing.T) {
 	initTime := initTime()
 
-	l, err := NewLFU(128, nil)
+	l, err := NewSimpleLRU(128, nil)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
 	for i := 0; i < 256; i++ {
 		l.Add(i, i, initTime)
-		for c := 0; c < i; c++ {
-			l.Get(i)
-		}
 	}
 	k, _, _, ok := l.GetOldest()
 	if !ok {
@@ -124,7 +117,7 @@ func TestLFU_GetOldest_RemoveOldest(t *testing.T) {
 }
 
 // Test that Add returns true/false if an eviction occurred
-func TestLFU_Add(t *testing.T) {
+func TestLRU_Add(t *testing.T) {
 	initTime := initTime()
 
 	evictCounter := 0
@@ -132,7 +125,7 @@ func TestLFU_Add(t *testing.T) {
 		evictCounter++
 	}
 
-	l, err := NewLFU(1, onEvicted)
+	l, err := NewSimpleLRU(1, onEvicted)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
@@ -149,19 +142,16 @@ func TestLFU_Add(t *testing.T) {
 }
 
 // Test that Contains doesn't update recent-ness
-func TestLFU_Contains(t *testing.T) {
+func TestLRU_Contains(t *testing.T) {
 	initTime := initTime()
 
-	l, err := NewLFU(2, nil)
+	l, err := NewSimpleLRU(2, nil)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
 
 	l.Add(1, 1, initTime)
-	l.Get(1)
 	l.Add(2, 2, initTime)
-	l.Get(2)
-	l.Get(2)
 	if !l.Contains(1) {
 		t.Errorf("1 should be contained")
 	}
@@ -173,19 +163,16 @@ func TestLFU_Contains(t *testing.T) {
 }
 
 // Test that Peek doesn't update recent-ness
-func TestLFU_Peek(t *testing.T) {
+func TestLRU_Peek(t *testing.T) {
 	initTime := initTime()
 
-	l, err := NewLFU(2, nil)
+	l, err := NewSimpleLRU(2, nil)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
 
 	l.Add(1, 1, initTime)
-	l.Get(1)
 	l.Add(2, 2, initTime)
-	l.Get(2)
-	l.Get(2)
 	if v, _, ok := l.Peek(1); !ok || v != 1 {
 		t.Errorf("1 should be set to 1: %v, %v", v, ok)
 	}
@@ -197,14 +184,14 @@ func TestLFU_Peek(t *testing.T) {
 }
 
 // Test that Resize can upsize and downsize
-func TestLFU_Resize(t *testing.T) {
+func TestLRU_Resize(t *testing.T) {
 	initTime := initTime()
 
 	onEvictCounter := 0
 	onEvicted := func(k interface{}, v interface{}, expirationTime int64) {
 		onEvictCounter++
 	}
-	l, err := NewLFU(2, onEvicted)
+	l, err := NewSimpleLRU(2, onEvicted)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}

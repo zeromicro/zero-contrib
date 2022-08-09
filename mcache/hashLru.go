@@ -2,13 +2,12 @@ package mcache
 
 import (
 	"crypto/md5"
-	"github.com/songangweb/mcache/simplelru"
 	"math"
 	"runtime"
 	"sync"
 )
 
-// HashLruCache is a thread-safe fixed size LRU cache.
+// HashLruCache is a thread-safe fixed size SimpleLRU cache.
 type HashLruCache struct {
 	list     []*HashLruCacheOne
 	sliceNum int
@@ -16,11 +15,11 @@ type HashLruCache struct {
 }
 
 type HashLruCacheOne struct {
-	lru  simplelru.LRUCache
+	lru  SimpleLRUCache
 	lock sync.RWMutex
 }
 
-// NewHashLRU creates an LRU of the given size.
+// NewHashLRU creates an SimpleLRU of the given size.
 func NewHashLRU(size, sliceNum int) (*HashLruCache, error) {
 	return NewHashLruWithEvict(size, sliceNum, nil)
 }
@@ -41,7 +40,7 @@ func NewHashLruWithEvict(size, sliceNum int, onEvicted func(key interface{}, val
 	h.sliceNum = sliceNum
 	h.list = make([]*HashLruCacheOne, sliceNum)
 	for i := 0; i < sliceNum; i++ {
-		l, _ := simplelru.NewLRU(lruLen, onEvicted)
+		l, _ := NewSimpleLRU(lruLen, onEvicted)
 		h.list[i] = &HashLruCacheOne{
 			lru: l,
 		}

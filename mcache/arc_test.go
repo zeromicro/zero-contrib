@@ -215,10 +215,10 @@ func TestARC_Adaptive(t *testing.T) {
 	//fmt.Println("l.b2: ", l.b2)
 
 	// Current state
-	// t1 : (MRU) [3, 4] (LRU)
-	// t2 : (MRU) [0, 1] (LFU)
-	// b1 : (MRU) [2] (LRU)
-	// b2 : (MRU) [] (LFU)
+	// t1 : (MRU) [3, 4] (SimpleLRU)
+	// t2 : (MRU) [0, 1] (SimpleLFU)
+	// b1 : (MRU) [2] (SimpleLRU)
+	// b2 : (MRU) [] (SimpleLFU)
 
 	// Add 2, should cause hit on b1
 	l.Add(2, 2, 0)
@@ -239,10 +239,10 @@ func TestARC_Adaptive(t *testing.T) {
 	//fmt.Println("l.b2: ", l.b2)
 
 	// Current state
-	// t1 : (MRU) [4] (LRU)
-	// t2 : (MRU) [0, 1, 2] (LFU)
-	// b1 : (MRU) [3] (LRU)
-	// b2 : (MRU) [] (LFU)
+	// t1 : (MRU) [4] (SimpleLRU)
+	// t2 : (MRU) [0, 1, 2] (SimpleLFU)
+	// b1 : (MRU) [3] (SimpleLRU)
+	// b2 : (MRU) [] (SimpleLFU)
 
 	// Add 4, should migrate to t2
 	l.Add(4, 4, 0)
@@ -260,10 +260,10 @@ func TestARC_Adaptive(t *testing.T) {
 	//fmt.Println("l.b2: ", l.b2)
 
 	// Current state
-	// t1 : (MRU) [] (LRU)
-	// t2 : (MRU) [0, 1, 2, 4] (LFU)
-	// b1 : (MRU) [3] (LRU)
-	// b2 : (MRU) [] (LFU)
+	// t1 : (MRU) [] (SimpleLRU)
+	// t2 : (MRU) [0, 1, 2, 4] (SimpleLFU)
+	// b1 : (MRU) [3] (SimpleLRU)
+	// b2 : (MRU) [] (SimpleLFU)
 
 	// Add 4, should evict to b2
 	l.Add(5, 5, 0)
@@ -284,10 +284,10 @@ func TestARC_Adaptive(t *testing.T) {
 	//fmt.Println("l.b2: ", l.b2)
 
 	// Current state
-	// t1 : (MRU) [5] (LRU)
-	// t2 : (MRU) [0, 1, 2] (LFU)
-	// b1 : (MRU) [3] (LRU)
-	// b2 : (MRU) [4] (LFU)
+	// t1 : (MRU) [5] (SimpleLRU)
+	// t2 : (MRU) [0, 1, 2] (SimpleLFU)
+	// b1 : (MRU) [3] (SimpleLRU)
+	// b2 : (MRU) [4] (SimpleLFU)
 
 	// Add 0, should decrease p
 	l.Add(0, 0, 0)
@@ -314,10 +314,10 @@ func TestARC_Adaptive(t *testing.T) {
 	//fmt.Println("l.b2: ", l.b2)
 
 	// Current state
-	// t1 : (MRU) [5] (LRU)
-	// t2 : (MRU) [0, 1, 2] (LFU)
-	// b1 : (MRU) [3] (LRU)
-	// b2 : (MRU) [4] (LFU)
+	// t1 : (MRU) [5] (SimpleLRU)
+	// t2 : (MRU) [0, 1, 2] (SimpleLFU)
+	// b1 : (MRU) [3] (SimpleLRU)
+	// b2 : (MRU) [4] (SimpleLFU)
 }
 
 func TestARC(t *testing.T) {
@@ -404,4 +404,3 @@ func TestARC_Peek(t *testing.T) {
 		t.Errorf("should not have updated recent-ness of 1")
 	}
 }
-

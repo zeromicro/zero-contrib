@@ -1,6 +1,6 @@
-package simplelfu
+package mcache
 
-type LFUCache interface {
+type SimpleLFUCache interface {
 	Add(key, value interface{}, expirationTime int64) (ok bool)
 
 	Get(key interface{}) (value interface{}, expirationTime int64, ok bool)
