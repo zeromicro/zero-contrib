@@ -26,16 +26,11 @@ type target struct {
 }
 
 //  parseURL with parameters
-func parseURL(u string) (target, error) {
-	rawURL, err := url.Parse(u)
-	if err != nil {
-		return target{}, errors.Wrap(err, "Malformed URL")
-	}
-
+func parseURL(rawURL url.URL) (target, error) {
 	if rawURL.Scheme != schemeName ||
 		len(rawURL.Host) == 0 || len(strings.TrimLeft(rawURL.Path, "/")) == 0 {
 		return target{},
-			errors.Errorf("Malformed URL('%s'). Must be in the next format: 'nacos://[user:passwd]@host/service?param=value'", u)
+			errors.Errorf("Malformed URL('%s'). Must be in the next format: 'nacos://[user:passwd]@host/service?param=value'", rawURL.String())
 	}
 
 	var tgt target
@@ -44,7 +39,7 @@ func parseURL(u string) (target, error) {
 		params[name] = value[0]
 	}
 
-	err = mapping.UnmarshalKey(params, &tgt)
+	err := mapping.UnmarshalKey(params, &tgt)
 	if err != nil {
 		return target{}, errors.Wrap(err, "Malformed URL parameters")
 	}
