@@ -80,7 +80,7 @@ func main() {
 		Method: http.MethodGet,
 		Path:   "/api/:name/:id",  // GET /api/joh/123
 		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var commonPath CommonPath
+			var commonPath CommonPathID
 			err := httpx.Parse(r, &commonPath)
 			if err != nil {
 				return
