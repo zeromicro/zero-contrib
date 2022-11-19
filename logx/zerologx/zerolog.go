@@ -2,6 +2,7 @@ package zerologx
 
 import (
 	"fmt"
+
 	"github.com/rs/zerolog"
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -12,7 +13,7 @@ type (
 	}
 )
 
-func NewZeroLogWriter(logger zerolog.Logger) *ZeroLogWriter {
+func NewZeroLogWriter(logger zerolog.Logger) logx.Writer {
 	return &ZeroLogWriter{logger: logger}
 }
 
@@ -23,6 +24,10 @@ func (w *ZeroLogWriter) Alert(v interface{}) {
 func (w *ZeroLogWriter) Close() error {
 	w.logger.Fatal().Msg("")
 	return nil
+}
+
+func (w *ZeroLogWriter) Debug(v interface{}, fields ...logx.LogField) {
+	toZeroLogInterface(w.logger.Debug(), fields...).Msgf(fmt.Sprint(v))
 }
 
 func (w *ZeroLogWriter) Error(v interface{}, fields ...logx.LogField) {
