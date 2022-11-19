@@ -29,6 +29,10 @@ func (w *LogrusWriter) Close() error {
 	return nil
 }
 
+func (w *LogrusWriter) Debug(v interface{}, fields ...logx.LogField) {
+	w.logger.WithFields(toLogrusFields(fields...)).Debug(v)
+}
+
 func (w *LogrusWriter) Error(v interface{}, fields ...logx.LogField) {
 	w.logger.WithFields(toLogrusFields(fields...)).Error(v)
 }
