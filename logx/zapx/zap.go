@@ -33,6 +33,10 @@ func (w *ZapWriter) Close() error {
 	return w.logger.Sync()
 }
 
+func (w *ZapWriter) Debug(v interface{}, fields ...logx.LogField) {
+	w.logger.Debug(fmt.Sprint(v), toZapFields(fields...)...)
+}
+
 func (w *ZapWriter) Error(v interface{}, fields ...logx.LogField) {
 	w.logger.Error(fmt.Sprint(v), toZapFields(fields...)...)
 }
