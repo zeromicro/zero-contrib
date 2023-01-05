@@ -19,13 +19,13 @@ type target struct {
 	Clusters    []string      `key:",optional"`
 	NamespaceID string        `key:"namespaceid,optional"`
 	Timeout     time.Duration `key:"timeout,optional"`
-
-	LogLevel string `key:",optional"`
-	LogDir   string `key:",optional"`
-	CacheDir string `key:",optional"`
+	AppName     string        `key:"appName,optional"`
+	LogLevel    string        `key:",optional"`
+	LogDir      string        `key:",optional"`
+	CacheDir    string        `key:",optional"`
 }
 
-//  parseURL with parameters
+// parseURL with parameters
 func parseURL(rawURL url.URL) (target, error) {
 	if rawURL.Scheme != schemeName ||
 		len(rawURL.Host) == 0 || len(strings.TrimLeft(rawURL.Path, "/")) == 0 {

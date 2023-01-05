@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/nacos-group/nacos-sdk-go/common/logger"
-	"github.com/nacos-group/nacos-sdk-go/model"
+	"github.com/nacos-group/nacos-sdk-go/v2/common/logger"
+	"github.com/nacos-group/nacos-sdk-go/v2/model"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/resolver"
 )
@@ -36,14 +36,18 @@ func newWatcher(ctx context.Context, cancel context.CancelFunc, out chan<- []str
 	}
 }
 
-func (nw *watcher) CallBackHandle(services []model.SubscribeService, err error) {
+func (nw *watcher) CallBackHandle(services []model.Instance, err error) {
 	if err != nil {
 		logger.Error("[Nacos resolver] watcher call back handle error:%v", err)
 		return
 	}
 	ee := make([]string, 0, len(services))
 	for _, s := range services {
-		ee = append(ee, fmt.Sprintf("%s:%d", s.Ip, s.Port))
+		if s.Metadata != nil && s.Metadata["gRPC_port"] != "" {
+			ee = append(ee, fmt.Sprintf("%s:%s", s.Ip, s.Metadata["gRPC_port"]))
+		} else {
+			ee = append(ee, fmt.Sprintf("%s:%d", s.Ip, s.Port))
+		}
 	}
 	nw.out <- ee
 }
