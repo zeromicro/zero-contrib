@@ -3,13 +3,14 @@ package nacos
 import (
 	"context"
 	"fmt"
-	"github.com/nacos-group/nacos-sdk-go/clients"
-	"github.com/nacos-group/nacos-sdk-go/common/constant"
-	"github.com/nacos-group/nacos-sdk-go/vo"
-	"github.com/pkg/errors"
-	"google.golang.org/grpc/resolver"
 	"net"
 	"strconv"
+
+	"github.com/nacos-group/nacos-sdk-go/v2/clients"
+	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
+	"github.com/nacos-group/nacos-sdk-go/v2/vo"
+	"github.com/pkg/errors"
+	"google.golang.org/grpc/resolver"
 )
 
 func init() {
@@ -40,6 +41,7 @@ func (b *builder) Build(url resolver.Target, conn resolver.ClientConn, opts reso
 	}
 
 	cc := &constant.ClientConfig{
+		AppName:     tgt.AppName,
 		NamespaceId: tgt.NamespaceID,
 		Username:    tgt.User,
 		Password:    tgt.Password,
