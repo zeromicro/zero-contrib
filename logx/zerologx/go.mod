@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/rs/zerolog v1.28.0
-	github.com/zeromicro/go-zero v1.4.2
+	github.com/zeromicro/go-zero v1.4.4
 )
 
 require (
