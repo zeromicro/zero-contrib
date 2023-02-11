@@ -30,7 +30,7 @@ Etcd:
 ```go
 type Config struct {
   rest.RestConf
-  Etcd discov.EtcdConf
+  Etcd discov.EtcdConf // etcd register center config
 }
 ```
 
