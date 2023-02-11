@@ -37,8 +37,17 @@ type Config struct {
 - main.go
 
 ```go
-import "github.com/zeromicro/zero-contrib/rest/registry/etcd"
+package main
 
+import (
+	"flag"
+
+	"github.com/zeromicro/go-zero/conf"
+	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/zero-contrib/rest/registry/etcd"
+)
+
+var configFile = flag.String("f", "etc/user-api.yaml", "the config file")
 
 func main() {
   flag.Parse()
