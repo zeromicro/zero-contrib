@@ -6,8 +6,8 @@ require (
 	github.com/hashicorp/consul/api v1.13.0
 	github.com/jpillora/backoff v1.0.0
 	github.com/pkg/errors v0.9.1
-	github.com/zeromicro/go-zero v1.3.4
-	google.golang.org/grpc v1.46.2
+	github.com/zeromicro/go-zero v1.4.4
+	google.golang.org/grpc v1.50.1
 )
 
 require (
@@ -27,7 +27,4 @@ require (
 	github.com/miekg/dns v1.1.45 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
-	github.com/stretchr/objx v0.3.0 // indirect
-	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
-	golang.org/x/tools v0.1.8 // indirect
 )
