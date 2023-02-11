@@ -48,7 +48,7 @@ func main() {
 
   server := rest.MustNewServer(c.RestConf)
   // register rest to etcd
-  _ = etcd.RegisterRest(c.Host, c.Port, c.Etcd)
+  _ = etcd.RegisterRest(c.Etcd, c.Host, c.Port)
 
   server.Start()
 }

@@ -16,7 +16,7 @@ const (
 )
 
 // RegisterRest register reset to etcd.
-func RegisterRest(host string, port int, etcd discov.EtcdConf) error {
+func RegisterRest(etcd discov.EtcdConf, host string, port int) error {
 	if err := etcd.Validate(); err != nil {
 		return err
 	}
