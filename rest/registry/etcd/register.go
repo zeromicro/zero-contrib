@@ -8,6 +8,7 @@ import (
 	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/core/netx"
 	"github.com/zeromicro/go-zero/core/proc"
+	"github.com/zeromicro/go-zero/rest"
 )
 
 const (
@@ -16,12 +17,12 @@ const (
 )
 
 // RegisterRest register reset to etcd.
-func RegisterRest(etcd discov.EtcdConf, host string, port int) error {
+func RegisterRest(etcd discov.EtcdConf, svrConf rest.RestConf) error {
 	if err := etcd.Validate(); err != nil {
 		return err
 	}
 
-	listenOn := fmt.Sprintf("%s:%d", host, port)
+	listenOn := fmt.Sprintf("%s:%d", svrConf.Host, svrConf.Port)
 	pubListenOn := figureOutListenOn(listenOn)
 	var pubOpts []discov.PubOption
 	if etcd.HasAccount() {
