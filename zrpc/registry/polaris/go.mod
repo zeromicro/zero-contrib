@@ -7,5 +7,5 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/polarismesh/polaris-go v1.1.0
 	github.com/zeromicro/go-zero v1.4.4
-	google.golang.org/grpc v1.50.1
+	google.golang.org/grpc v1.53.0
 )
