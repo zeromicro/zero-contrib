@@ -26,7 +26,7 @@ func init() {
 type builder struct{}
 
 func (b *builder) Build(url resolver.Target, conn resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
-	dsn := strings.Join([]string{schemeName + ":/", url.Authority, url.Endpoint}, "/")
+	dsn := strings.Join([]string{schemeName + ":/", url.URL.Host, url.URL.Path}, "/")
 	tgr, err := parseURL(dsn)
 	if err != nil {
 		return nil, errors.Wrap(err, "Wrong polaris URL")
