@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.8.3
+	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/stretchr/testify v1.8.2
-	github.com/zeromicro/go-zero v1.4.4
+	github.com/zeromicro/go-zero v1.5.0
 )
