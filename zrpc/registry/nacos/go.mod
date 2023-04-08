@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/pkg/errors v0.9.1
-	github.com/zeromicro/go-zero v1.4.4
+	github.com/zeromicro/go-zero v1.5.0
 	google.golang.org/grpc v1.53.0
 )
 
