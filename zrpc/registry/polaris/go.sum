@@ -772,8 +772,8 @@ github.com/pkg/sftp v1.10.1/go.mod h1:lYOWFsE0bwd1+KfKJaKeuokY15vzFx25BLbzYYoAxZ
 github.com/pkg/sftp v1.13.1/go.mod h1:3HaPG6Dq1ILlpPZRO0HVMrsydcdLt6HRDccSgb87qRg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/polarismesh/polaris-go v1.4.2 h1:CmDpYa5B/gYmX5yCDaok38E3xQGsu5fuY4mzrrXstWY=
-github.com/polarismesh/polaris-go v1.4.2/go.mod h1:SeELvEUhF2DpXJ/qYZXt6+8nWiio22yuoX7iaOVZSJ4=
+github.com/polarismesh/polaris-go v1.4.3 h1:Ka2ancA4BCLt4pxhEJdRIHMWaj+wkwtw+4AlrSI24c0=
+github.com/polarismesh/polaris-go v1.4.3/go.mod h1:ymxU5F20Bs99P+jvt5tbLn5guOEt1JmT4i69AOmZSVI=
 github.com/polarismesh/specification v1.2.1 h1:NcFoinO+aSWIOIyKTAhvEbjaPvZAAm5/DwJAL2FGdXs=
 github.com/polarismesh/specification v1.2.1/go.mod h1:rDvMMtl5qebPmqiBLNa5Ps0XtwkP31ZLirbH4kXA0YU=
 github.com/prashantv/gostub v1.1.0 h1:BTyx3RfQjRHnUWaGF9oQos79AlQ5k8WNktv7VGvVH4g=
