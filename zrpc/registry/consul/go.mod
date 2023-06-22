@@ -7,7 +7,7 @@ require (
 	github.com/jpillora/backoff v1.0.0
 	github.com/pkg/errors v0.9.1
 	github.com/zeromicro/go-zero v1.5.2
-	google.golang.org/grpc v1.55.0
+	google.golang.org/grpc v1.56.1
 )
 
 require (
