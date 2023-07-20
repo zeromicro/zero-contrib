@@ -4,6 +4,6 @@ go 1.16
 
 require (
 	github.com/casbin/casbin/v2 v2.72.1
-	github.com/stretchr/testify v1.8.2
-	github.com/zeromicro/go-zero v1.5.2
+	github.com/stretchr/testify v1.8.4
+	github.com/zeromicro/go-zero v1.5.4
 )
