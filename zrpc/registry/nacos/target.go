@@ -23,6 +23,8 @@ type target struct {
 	LogLevel    string        `key:",optional"`
 	LogDir      string        `key:",optional"`
 	CacheDir    string        `key:",optional"`
+	NotLoadCacheAtStart  bool `key:"notLoadCacheAtStart,optional"`
+	UpdateCacheWhenEmpty bool `key:"updateCacheWhenEmpty,optional"`
 }
 
 // parseURL with parameters
@@ -56,6 +58,22 @@ func parseURL(rawURL url.URL) (target, error) {
 	tgt.Password, _ = rawURL.User.Password()
 	tgt.Addr = rawURL.Host
 	tgt.Service = strings.TrimLeft(rawURL.Path, "/")
+
+	if logLevel, exists := os.LookupEnv("NACOS_LOG_LEVEL"); exists {
+		tgt.LogLevel = logLevel
+	}
+
+	if logDir, exists := os.LookupEnv("NACOS_LOG_DIR"); exists {
+		tgt.LogDir = logDir
+	}
+
+	if notLoadCacheAtStart, exists := os.LookupEnv("NACOS_NOT_LOAD_CACHE_AT_START"); exists {
+		tgt.NotLoadCacheAtStart = notLoadCacheAtStart == "true"
+	}
+
+	if updateCacheWhenEmpty, exists := os.LookupEnv("NACOS_UPDATE_CACHE_WHEN_EMPTY"); exists {
+		tgt.UpdateCacheWhenEmpty = updateCacheWhenEmpty == "true"
+	}
 
 	return tgt, nil
 }

@@ -46,6 +46,8 @@ func (b *builder) Build(url resolver.Target, conn resolver.ClientConn, opts reso
 		Username:    tgt.User,
 		Password:    tgt.Password,
 		TimeoutMs:   uint64(tgt.Timeout),
+		NotLoadCacheAtStart:  tgt.NotLoadCacheAtStart,
+		UpdateCacheWhenEmpty: tgt.UpdateCacheWhenEmpty,
 	}
 
 	if tgt.CacheDir != "" {
