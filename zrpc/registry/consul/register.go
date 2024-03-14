@@ -77,7 +77,6 @@ func RegisterService(listenOn string, c Conf) error {
 		for {
 			<-ticker.C
 			err = client.Agent().UpdateTTL(serviceID, "", "passing")
-			logx.Info("update ttl")
 			if err != nil {
 				logx.Infof("update ttl of service error: %v", err.Error())
 			}
