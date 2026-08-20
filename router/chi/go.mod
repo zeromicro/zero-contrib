@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/router/chi
+module github.com/wqyjh/zero-contrib/router/chi
 
 go 1.15
 

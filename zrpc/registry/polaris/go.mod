@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/zrpc/registry/polaris
+module github.com/wqyjh/zero-contrib/zrpc/registry/polaris
 
 go 1.15
 

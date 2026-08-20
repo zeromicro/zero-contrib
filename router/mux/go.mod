@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/router/mux
+module github.com/wqyjh/zero-contrib/router/mux
 
 go 1.15
 

@@ -5,7 +5,7 @@ Prerequisites:
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/rest/registry/etcd
+go get -u github.com/wqyjh/zero-contrib/rest/registry/etcd
 ```
 
 For example:
@@ -44,7 +44,7 @@ import (
 
 	"github.com/zeromicro/go-zero/conf"
 	"github.com/zeromicro/go-zero/rest"
-	"github.com/zeromicro/zero-contrib/rest/registry/etcd"
+	"github.com/wqyjh/zero-contrib/rest/registry/etcd"
 )
 
 var configFile = flag.String("f", "etc/user-api.yaml", "the config file")

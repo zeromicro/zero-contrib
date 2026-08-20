@@ -5,7 +5,7 @@ Prerequesites:
 
 Download the module:
 ```console
-go get -u github.com/zeromicro/zero-contrib/router/chi
+go get -u github.com/wqyjh/zero-contrib/router/chi
 ```
 
 For example:
@@ -18,7 +18,7 @@ import (
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
-    "github.com/zeromicro/zero-contrib/router/chi"
+    "github.com/wqyjh/zero-contrib/router/chi"
 	"net/http"
 	"strings"
 )

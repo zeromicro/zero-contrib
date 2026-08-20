@@ -7,7 +7,7 @@ Prerequisites:
 Download the module:
 
 ```shell
-go get -u github.com/zeromicro/zero-contrib/auth/casbin
+go get -u github.com/wqyjh/zero-contrib/auth/casbin
 ```
 
 For example:
@@ -18,7 +18,7 @@ package main
 import (
 	stdcasbin "github.com/casbin/casbin/v2"
 	"github.com/zeromicro/go-zero/rest"
-	"github.com/zeromicro/zero-contrib/auth/casbin"
+	"github.com/wqyjh/zero-contrib/auth/casbin"
 )
 
 func main() {

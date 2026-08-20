@@ -11,7 +11,7 @@ go get -u github.com/zeromicro/go-zero
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/router/mux
+go get -u github.com/wqyjh/zero-contrib/router/mux
 ```
 
 For example:
@@ -26,7 +26,7 @@ import (
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zeromicro/zero-contrib/router/mux"
+	"github.com/wqyjh/zero-contrib/router/mux"
 	"net/http"
 )
 

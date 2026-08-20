@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/zrpc/registry/nacos
+module github.com/wqyjh/zero-contrib/zrpc/registry/nacos
 
 go 1.15
 

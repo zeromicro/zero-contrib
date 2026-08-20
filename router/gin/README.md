@@ -11,7 +11,7 @@ go get -u github.com/zeromicro/go-zero
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/router/gin
+go get -u github.com/wqyjh/zero-contrib/router/gin
 ```
 
 For example:
@@ -27,8 +27,8 @@ import (
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zeromicro/zero-contrib/router/gin"
-	stdgin "github.com/gin-gonic/gin"
+	zerogin "github.com/wqyjh/zero-contrib/router/gin"
+	"github.com/gin-gonic/gin"
 )
 
 type CommonPathID struct {
@@ -46,11 +46,12 @@ func (c *CommonPathID) String() string {
 }
 
 func init() {
-	stdgin.SetMode(stdgin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 }
 
 func main() {
-	r := gin.NewRouter()
+	server := gin.New()
+	r := zerogin.NewRouter(r)
 	engine := rest.MustNewServer(rest.RestConf{
 		ServiceConf: service.ServiceConf{
 			Log: logx.LogConf{
