@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"sync"
 
 	"github.com/nacos-group/nacos-sdk-go/v2/common/logger"
 	"github.com/nacos-group/nacos-sdk-go/v2/model"
@@ -13,13 +14,20 @@ import (
 
 type resolvr struct {
 	cancelFunc context.CancelFunc
+	client     interface {
+		CloseClient()
+	}
+	closeOnce sync.Once
 }
 
 func (r *resolvr) ResolveNow(resolver.ResolveNowOptions) {}
 
 // Close closes the resolver.
 func (r *resolvr) Close() {
-	r.cancelFunc()
+	r.closeOnce.Do(func() {
+		r.cancelFunc()
+		r.client.CloseClient()
+	})
 }
 
 type watcher struct {
@@ -49,7 +57,10 @@ func (nw *watcher) CallBackHandle(services []model.Instance, err error) {
 			ee = append(ee, fmt.Sprintf("%s:%d", s.Ip, s.Port))
 		}
 	}
-	nw.out <- ee
+	select {
+	case nw.out <- ee:
+	case <-nw.ctx.Done():
+	}
 }
 
 func populateEndpoints(ctx context.Context, clientConn resolver.ClientConn, input <-chan []string) {

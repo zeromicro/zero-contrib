@@ -80,7 +80,10 @@ func (b *builder) Build(url resolver.Target, conn resolver.ClientConn, opts reso
 
 	go populateEndpoints(ctx, conn, pipe)
 
-	return &resolvr{cancelFunc: cancel}, nil
+	return &resolvr{
+		cancelFunc: cancel,
+		client:     cli,
+	}, nil
 }
 
 // Scheme returns the scheme supported by this resolver.
