@@ -11,7 +11,7 @@ ETag: ETag Handler to support [ETag](https://en.wikipedia.org/wiki/HTTP_ETag) bo
 ### Download the module:
 
 ```shell
-go get -u github.com/zeromicro/zero-contrib/handler
+go get -u github.com/wqyjh/zero-contrib/handler
 ```
 
 ### Example:
@@ -23,7 +23,7 @@ import (
 	...
 	
 	"github.com/zeromicro/go-zero/rest"
-	"github.com/zeromicro/zero-contrib/handler"
+	"github.com/wqyjh/zero-contrib/handler"
 )
 
 func main() {

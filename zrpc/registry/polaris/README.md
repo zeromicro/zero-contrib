@@ -5,7 +5,7 @@ Prerequisites:
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/zrpc/registry/polaris
+go get -u github.com/wqyjh/zero-contrib/zrpc/registry/polaris
 ```
 
 For example:
@@ -24,7 +24,7 @@ global:
 - main.go
 
 ```go
-import _ "github.com/zeromicro/zero-contrib/zrpc/registry/polaris"
+import _ "github.com/wqyjh/zero-contrib/zrpc/registry/polaris"
 
 func main() {
 	flag.Parse()
@@ -51,7 +51,7 @@ func main() {
 - main.go
 
 ```go
-import _ "github.com/zeromicro/zero-contrib/zrpc/registry/polaris"
+import _ "github.com/wqyjh/zero-contrib/zrpc/registry/polaris"
 ```
 
 - etc/\*.yaml

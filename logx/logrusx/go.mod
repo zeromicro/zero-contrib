@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/logx/logrusx
+module github.com/wqyjh/zero-contrib/logx/logrusx
 
 go 1.16
 

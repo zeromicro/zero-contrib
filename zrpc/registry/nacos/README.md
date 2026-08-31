@@ -5,7 +5,7 @@ Prerequisites:
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/zrpc/registry/nacos
+go get -u github.com/wqyjh/zero-contrib/zrpc/registry/nacos
 ```
 
 For example:
@@ -15,7 +15,7 @@ For example:
 - main.go
 
 ```go
-import _ "github.com/zeromicro/zero-contrib/zrpc/registry/nacos"
+import _ "github.com/wqyjh/zero-contrib/zrpc/registry/nacos"
 
 func main() {
 	flag.Parse()
@@ -53,7 +53,7 @@ func main() {
 - main.go
 
 ```go
-import _ "github.com/zeromicro/zero-contrib/zrpc/registry/nacos"
+import _ "github.com/wqyjh/zero-contrib/zrpc/registry/nacos"
 ```
 
 - etc/\*.yaml

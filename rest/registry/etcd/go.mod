@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/rest/registry/etcd
+module github.com/wqyjh/zero-contrib/rest/registry/etcd
 
 go 1.16
 

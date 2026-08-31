@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/auth/casbin
+module github.com/wqyjh/zero-contrib/auth/casbin
 
 go 1.16
 

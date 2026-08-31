@@ -11,7 +11,7 @@ go get -u github.com/zeromicro/go-zero
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/logx/zapx
+go get -u github.com/wqyjh/zero-contrib/logx/zapx
 ```
 
 For example:
@@ -24,7 +24,7 @@ import (
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/zero-contrib/logx/zapx"
+	"github.com/wqyjh/zero-contrib/logx/zapx"
 )
 
 func main() {

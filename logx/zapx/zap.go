@@ -25,6 +25,12 @@ func NewZapWriter(opts ...zap.Option) (logx.Writer, error) {
 	}, nil
 }
 
+func NewFromZapLogger(logger *zap.Logger) logx.Writer {
+	return &ZapWriter{
+		logger: logger,
+	}
+}
+
 func (w *ZapWriter) Alert(v interface{}) {
 	w.logger.Error(fmt.Sprint(v))
 }

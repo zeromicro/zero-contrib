@@ -1,4 +1,4 @@
-module github.com/zeromicro/zero-contrib/router/gin
+module github.com/wqyjh/zero-contrib/router/gin
 
 go 1.15
 

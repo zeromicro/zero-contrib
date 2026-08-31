@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"github.com/zeromicro/go-zero/rest/pathvar"
@@ -29,9 +30,9 @@ func (m *mockedResponseWriter) WriteHeader(code int) {
 	m.code = code
 }
 
-func TestChiRouterNotFound(t *testing.T) {
+func TestGinRouterNotFound(t *testing.T) {
 	var notFound bool
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	router.SetNotFoundHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		notFound = true
 	}))
@@ -44,9 +45,9 @@ func TestChiRouterNotFound(t *testing.T) {
 	assert.True(t, notFound)
 }
 
-func TestChiRouterNotAllowed(t *testing.T) {
+func TestGinRouterNotAllowed(t *testing.T) {
 	var notAllowed bool
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	router.SetNotAllowedHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		notAllowed = true
 	}))
@@ -76,7 +77,7 @@ func TestGinRouter(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.method+":"+test.path, func(t *testing.T) {
 			routed := false
-			router := NewRouter()
+			router := NewRouter(gin.New())
 
 			err := router.Handle(test.method, "/test/:name/:last_name/*wild", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				routed = true
@@ -115,7 +116,7 @@ func TestParseJsonPost(t *testing.T) {
 	assert.Nil(t, err)
 	r.Header.Set(httpx.ContentType, httpx.JsonContentType)
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	err = router.Handle(http.MethodPost, "/:name/:year", http.HandlerFunc(func(
 		w http.ResponseWriter, r *http.Request) {
 		v := struct {
@@ -147,7 +148,7 @@ func TestParseJsonPostWithIntSlice(t *testing.T) {
 	assert.Nil(t, err)
 	r.Header.Set(httpx.ContentType, httpx.JsonContentType)
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	err = router.Handle(http.MethodPost, "/:name/:year", http.HandlerFunc(func(
 		w http.ResponseWriter, r *http.Request) {
 		v := struct {
@@ -175,7 +176,7 @@ func TestParseJsonPostError(t *testing.T) {
 	assert.Nil(t, err)
 	r.Header.Set(httpx.ContentType, httpx.JsonContentType)
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	err = router.Handle(http.MethodPost, "/:name/:year", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			v := struct {
@@ -200,7 +201,7 @@ func TestParsePath(t *testing.T) {
 	r, err := http.NewRequest(http.MethodGet, "http://hello.com/kevin/2017", nil)
 	assert.Nil(t, err)
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	err = router.Handle(http.MethodGet, "/:name/:year", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			v := struct {
@@ -225,7 +226,7 @@ func TestParsePathRequired(t *testing.T) {
 	r, err := http.NewRequest(http.MethodGet, "http://hello.com/kevin", nil)
 	assert.Nil(t, err)
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	err = router.Handle(http.MethodGet, "/:name/", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			v := struct {
@@ -246,7 +247,7 @@ func TestParseQuery(t *testing.T) {
 	r, err := http.NewRequest(http.MethodGet, "http://hello.com/kevin/2017?nickname=whatever&zipcode=200000", nil)
 	assert.Nil(t, err)
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	err = router.Handle(http.MethodGet, "/:name/:year", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			v := struct {
@@ -271,7 +272,7 @@ func TestParseOptional(t *testing.T) {
 	r, err := http.NewRequest(http.MethodGet, "http://hello.com/kevin/2017?nickname=whatever&zipcode=", nil)
 	assert.Nil(t, err)
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	err = router.Handle(http.MethodGet, "/:name/:year", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			v := struct {
@@ -295,7 +296,7 @@ func TestParseOptional(t *testing.T) {
 func BenchmarkGinRouter(b *testing.B) {
 	b.ReportAllocs()
 
-	router := NewRouter()
+	router := NewRouter(gin.New())
 	router.Handle(http.MethodGet, "/api/param/:param1/:params2/:param3/:param4/:param5", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	}))
 	w := &mockedResponseWriter{}

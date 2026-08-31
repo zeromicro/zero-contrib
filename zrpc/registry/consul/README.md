@@ -5,7 +5,7 @@ Prerequisites:
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/zrpc/registry/consul
+go get -u github.com/wqyjh/zero-contrib/zrpc/registry/consul
 ```
 
 For example:
@@ -38,7 +38,7 @@ type Config struct {
 - main.go
 
 ```go
-import _ "github.com/zeromicro/zero-contrib/zrpc/registry/consul"
+import _ "github.com/wqyjh/zero-contrib/zrpc/registry/consul"
 
 func main() {
 	flag.Parse()
@@ -74,7 +74,7 @@ service "check.rpc" {
 - main.go
 
 ```go
-import _ "github.com/zeromicro/zero-contrib/zrpc/registry/consul"
+import _ "github.com/wqyjh/zero-contrib/zrpc/registry/consul"
 ```
 
 - etc/\*.yaml

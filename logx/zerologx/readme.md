@@ -11,7 +11,7 @@ go get -u github.com/zeromicro/go-zero
 Download the module:
 
 ```console
-go get -u github.com/zeromicro/zero-contrib/logx/zerologx
+go get -u github.com/wqyjh/zero-contrib/logx/zerologx
 ```
 
 For example:
@@ -23,7 +23,7 @@ import (
 	"context"
 	"github.com/rs/zerolog"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/zero-contrib/logx/zerologx"
+	"github.com/wqyjh/zero-contrib/logx/zerologx"
 	"os"
 	"time"
 )

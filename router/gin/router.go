@@ -14,8 +14,7 @@ type ginRouter struct {
 }
 
 // NewRouter returns a gin.Router.
-func NewRouter(opts ...Option) httpx.Router {
-	g := gin.New()
+func NewRouter(g *gin.Engine, opts ...Option) httpx.Router {
 	cfg := config{
 		redirectTrailingSlash: true,
 		redirectFixedPath:     false,
@@ -58,6 +57,7 @@ func (pr *ginRouter) SetNotFoundHandler(handler http.Handler) {
 }
 
 func (pr *ginRouter) SetNotAllowedHandler(handler http.Handler) {
+	pr.g.HandleMethodNotAllowed = true
 	pr.g.NoMethod(gin.WrapH(handler))
 }
 
