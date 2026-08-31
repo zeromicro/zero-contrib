@@ -37,7 +37,7 @@ func RegisterService(opts *Options) error {
 	}
 
 	// service register
-	_, err = client.RegisterInstance(vo.RegisterInstanceParam{
+	registerStatus, err := client.RegisterInstance(vo.RegisterInstanceParam{
 		ServiceName: opts.ServiceName,
 		Ip:          host,
 		Port:        port,
@@ -50,6 +50,20 @@ func RegisterService(opts *Options) error {
 		GroupName:   opts.Group,
 	})
 
+	if err != nil {
+		return err
+	}
+
+	// check register instance status
+	if registerStatus == false {
+		return fmt.Errorf("failed to register instance, status is %v", registerStatus)
+	}
+
+	// get register info
+	_, err = client.GetService(vo.GetServiceParam{
+		ServiceName: opts.ServiceName,
+		GroupName:   opts.Group,
+	})
 	if err != nil {
 		return err
 	}
