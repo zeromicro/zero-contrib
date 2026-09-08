@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/nacos-group/nacos-sdk-go/v2/model"
+	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 )
 
 type testNamingClient struct {
@@ -20,6 +21,8 @@ func (c *testNamingClient) CloseClient() {
 	c.closeCalls++
 }
 
+func (c *testNamingClient) Unsubscribe(*vo.SubscribeParam) error { return nil }
+
 func (c *testNamingClient) CloseCalls() int {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -31,7 +34,8 @@ func TestResolverCloseClosesNamingClient(t *testing.T) {
 	client := &testNamingClient{}
 	r := &resolvr{
 		cancelFunc: cancel,
-		client:     client,
+		cli:        client,
+		pipe:       make(chan []string, 1),
 	}
 
 	r.Close()
@@ -50,7 +54,7 @@ func TestResolverCloseClosesNamingClient(t *testing.T) {
 
 func TestWatcherCallbackReturnsWhenResolverIsClosed(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
-	watcher := newWatcher(ctx, cancel, make(chan []string))
+	watcher := newWatcher(ctx, make(chan []string))
 	done := make(chan struct{})
 
 	go func() {
