@@ -79,5 +79,5 @@ require (
 
 require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
-	github.com/nacos-group/nacos-sdk-go/v2 v2.3.5
+	github.com/nacos-group/nacos-sdk-go/v2 v2.3.6
 )
